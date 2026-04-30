@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>GEPCO | HT/LT Works Monitoring Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #eef2f7 0%, #d9e0e8 100%);
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+    }
+
+    /* main container */
+    .dashboard {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(1px);
+      border-radius: 48px;
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.7);
+      padding: 2rem 2rem 2.5rem 2rem;
+      transition: all 0.2s;
+    }
+
+    /* header section */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 3px solid #1e6f3f;
+      padding-bottom: 1.2rem;
+      margin-bottom: 2rem;
+      gap: 1rem;
+    }
+    .title-section h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1a472a, #2b7a4b);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+    .title-section p {
+      color: #2c3e2f;
+      font-weight: 500;
+      margin-top: 0.4rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      background: #1e6f3f20;
+      backdrop-filter: blur(4px);
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #0e4a2c;
+      border: 1px solid #92b4a2;
+    }
+    .stats-mini {
+      background: #ffffffee;
+      padding: 0.5rem 1.2rem;
+      border-radius: 60px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1f543b;
+    }
+
+    /* grid links layout */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 1.6rem;
+      margin: 2.2rem 0 2rem 0;
+    }
+
+    /* card style for each link */
+    .monitor-card {
+      background: white;
+      border-radius: 28px;
+      transition: all 0.25s ease;
+      box-shadow: 0 12px 22px -10px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(46, 125, 70, 0.2);
+      overflow: hidden;
+      backdrop-filter: blur(2px);
+    }
+    .monitor-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 32px -14px rgba(0, 32, 0, 0.25);
+      border-color: #3c9e6b;
+    }
+    .card-header {
+      background: #f9fbf9;
+      padding: 1rem 1.5rem 0.4rem 1.5rem;
+      border-bottom: 2px solid #e2ecd9;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-icon {
+      font-size: 2rem;
+      filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
+    }
+    .card-header h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1e4620;
+      letter-spacing: -0.2px;
+    }
+    .card-desc {
+      padding: 0.9rem 1.5rem 0.6rem 1.5rem;
+      font-size: 0.85rem;
+      color: #3d5a3c;
+      line-height: 1.4;
+      border-bottom: 1px solid #eef2e6;
+    }
+    .link-wrapper {
+      padding: 0.8rem 1.5rem 1.4rem 1.5rem;
+    }
+    .monitor-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: #eef5ea;
+      padding: 0.7rem 1rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #1e562e;
+      transition: all 0.2s;
+      border: 1px solid #ccdec2;
+      font-size: 0.9rem;
+    }
+    .monitor-link span:first-child {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .monitor-link:hover {
+      background: #cbe5d4;
+      color: #0a3a1f;
+      border-color: #6faf84;
+      box-shadow: 0 2px 6px rgba(47, 119, 72, 0.2);
+    }
+    .arrow {
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+    }
+    .monitor-link:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    /* footer note */
+    .footer-note {
+      margin-top: 2rem;
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px dashed #bcd0ae;
+      font-size: 0.85rem;
+      color: #2f6b47;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .update-info {
+      background: #ecf3e8;
+      border-radius: 20px;
+      padding: 0.2rem 1rem;
+    }
+    button.mock-tag {
+      background: none;
+      border: none;
+      font: inherit;
+      color: #357a50;
+      cursor: default;
+    }
+    @media (max-width: 700px) {
+      body { padding: 1rem; }
+      .dashboard { padding: 1.2rem; }
+      .header { flex-direction: column; align-items: flex-start; }
+      .title-section h1 { font-size: 1.7rem; }
+      .links-grid { grid-template-columns: 1fr; }
+      .card-header h3 { font-size: 1.2rem; }
+    }
+    /* special utility */
+    .pre-tip {
+      background: #fff8e7;
+      border-radius: 16px;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: #7c631b;
+      display: inline-block;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="header">
+    <div class="title-section">
+      <h1>⚡ GEPCO · HT/LT Works Dashboard</h1>
+      <p>
+        <span class="badge">🔌 Live Monitoring</span>
+        <span class="badge">📡 High Tension / Low Tension</span>
+        <span>实时追踪现场作业进度</span>
+      </p>
+    </div>
+    <div class="stats-mini">
+      📋 10 active monitoring channels &nbsp;|&nbsp; 🗺️ Sub Divisions
+    </div>
+  </div>
+
+  <!-- description row: all links are configurable via google sheets later -->
+  <div style="margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
+    <div style="font-weight: 500; color: #2b5a3b;">📌 Online monitoring modules — click any card to access live data from GEPCO's google sheets reports</div>
+    <div class="pre-tip">ℹ️ Each link points to your Google Sheet (ready for URL update)</div>
+  </div>
+
+  <!-- Grid of 10 monitoring links (professionally tailored for HT/LT works) -->
+  <div class="links-grid">
+    
+    <!-- 1. LS Site Report (Before starting work) -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">📋</div>
+        <h3>LS Site Report</h3>
+      </div>
+      <div class="card-desc">Pre-commencement safety & line survey · Before starting work checklist / soil & tools verification.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link1" target="_blank" rel="noopener noreferrer">
+          <span>🔍 View LS Report (Pre-start)</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 2. Live LT/HT Works (ongoing real-time) -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">⚡</div>
+        <h3>Live LT/HT Works</h3>
+      </div>
+      <div class="card-desc">Active sites · real-time conductor stringing, pole erection, transformer maintenance. Live status.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link2" target="_blank" rel="noopener noreferrer">
+          <span>🔌 Live operational works</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 3. Completed Works -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">✅</div>
+        <h3>Completed Works</h3>
+      </div>
+      <div class="card-desc">HT/LT projects · final commissioning reports, closure certifications, asset mapping.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link3" target="_blank" rel="noopener noreferrer">
+          <span>📑 Archive & Completed tasks</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 4. Sub Division Wise Works -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">🗺️</div>
+        <h3>Sub Division Wise Works</h3>
+      </div>
+      <div class="card-desc">Division-level filtering: City, Rural, Industrial subdivisions. Track progress per SDO.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link4" target="_blank" rel="noopener noreferrer">
+          <span>🏘️ View by Sub Division</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 5. HT Line Breakdown Monitoring -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">⚠️</div>
+        <h3>HT Line Breakdowns</h3>
+      </div>
+      <div class="card-desc">High Tension fault alerts, restoration status, feeder wise downtime tracking.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link5" target="_blank" rel="noopener noreferrer">
+          <span>🚨 HT Incident & Repair logs</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 6. LT Consumer Connection Requests -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">🏠</div>
+        <h3>LT Consumer Requests</h3>
+      </div>
+      <div class="card-desc">New connections, service line extensions, meter installation tracking (Low Tension).</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link6" target="_blank" rel="noopener noreferrer">
+          <span>📌 Pending & completed requests</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 7. Feeder wise Load Management (HT/LT) -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <h3>Feeder wise Load Mgmt</h3>
+      </div>
+      <div class="card-desc">HT/LT feeder analytics, peak load, overloading alerts and balancing actions.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link7" target="_blank" rel="noopener noreferrer">
+          <span>⚙️ Load & performance sheet</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 8. Transformer Health & Maintenance -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">🔧</div>
+        <h3>Transformer Health</h3>
+      </div>
+      <div class="card-desc">Distribution transformers (11kV/0.4kV) oil level, thermal imaging, maintenance schedule.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link8" target="_blank" rel="noopener noreferrer">
+          <span>⚡ Asset monitoring</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 9. Material Requisition & Stock for Works -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">📦</div>
+        <h3>Material / Inventory Tracker</h3>
+      </div>
+      <div class="card-desc">Cable, poles, conductors, hardware stock status for ongoing HT/LT projects.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link9" target="_blank" rel="noopener noreferrer">
+          <span>📦 Stock & Issuance log</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 10. Daily Progress Dashboard (consolidated) -->
+    <div class="monitor-card">
+      <div class="card-header">
+        <div class="card-icon">📈</div>
+        <h3>Daily Progress Report</h3>
+      </div>
+      <div class="card-desc">Consolidated HT/LT achievement, contractor wise performance & milestone status.</div>
+      <div class="link-wrapper">
+        <a href="#" class="monitor-link" id="link10" target="_blank" rel="noopener noreferrer">
+          <span>📅 Daily summary dashboard</span>
+          <span class="arrow">➡️</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- config section: helper to set your google sheets links easily -->
+  <div style="background: #eef3ea; border-radius: 32px; margin: 1rem 0 0.5rem 0; padding: 1.2rem 1.5rem; box-shadow: inset 0 0 0 1px #e2f0da, 0 4px 10px rgba(0,0,0,0.02);">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: space-between;">
+      <div>
+        <span style="font-weight: 700; color: #1f543b;">📎 GOOGLE SHEETS INTEGRATION</span>
+        <p style="font-size: 0.85rem; margin-top: 6px; color:#2c5c3c;">Paste your published sheet or shared link below &nbsp;→ &nbsp;All 10 monitoring links will redirect to your data.</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button id="applyAllBtn" style="background: #2b7a4b; border: none; color: white; font-weight: bold; padding: 0.5rem 1.2rem; border-radius: 60px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">🔗 Apply to ALL links</button>
+        <button id="resetDemoBtn" style="background: #f0f3ef; border: 1px solid #adc6a5; color: #2e673d; padding: 0.5rem 1.2rem; border-radius: 60px; cursor: pointer;">⟳ Reset demo placeholders</button>
+      </div>
+    </div>
+    <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
+        <label style="font-weight: 600; min-width: 120px;">Default Sheet URL:</label>
+        <input type="text" id="globalSheetInput" placeholder="https://docs.google.com/spreadsheets/d/.../edit?usp=sharing" style="flex: 3; padding: 10px 14px; border-radius: 60px; border: 1px solid #bfd9b0; background: white; font-size: 0.8rem;">
+        <button id="previewSetBtn" style="background: #ffffff; border: 1px solid #5a9f6e; border-radius: 40px; padding: 6px 18px;">Set Base Link</button>
+      </div>
+      <small style="color: #335e40;">💡 Tip: You can also edit each card's link manually by right-clicking any card's button, but the easiest is: paste your main monitoring google sheet (or separate sheets per module you manage). <br> For advanced use: you can configure 10 independent URLs below by clicking "Customize per link".</small>
+      <details style="margin-top: 6px;">
+        <summary style="cursor: pointer; color: #467a55; font-weight: 500;">✏️ Manually configure per-link (10 Google Sheets URLs)</summary>
+        <div style="margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 12px; background: #fefef7; padding: 1rem; border-radius: 28px;">
+          <div><label>1. LS Site Report: </label><input type="text" id="customUrl1" class="per-url-input" placeholder="https://..."></div>
+          <div><label>2. Live LT/HT Works: </label><input type="text" id="customUrl2" class="per-url-input" placeholder="https://..."></div>
+          <div><label>3. Completed Works: </label><input type="text" id="customUrl3" class="per-url-input" placeholder="https://..."></div>
+          <div><label>4. Sub Division Wise: </label><input type="text" id="customUrl4" class="per-url-input" placeholder="https://..."></div>
+          <div><label>5. HT Line Breakdowns: </label><input type="text" id="customUrl5" class="per-url-input" placeholder="https://..."></div>
+          <div><label>6. LT Consumer Requests: </label><input type="text" id="customUrl6" class="per-url-input" placeholder="https://..."></div>
+          <div><label>7. Feeder Load Mgmt: </label><input type="text" id="customUrl7" class="per-url-input" placeholder="https://..."></div>
+          <div><label>8. Transformer Health: </label><input type="text" id="customUrl8" class="per-url-input" placeholder="https://..."></div>
+          <div><label>9. Material Inventory: </label><input type="text" id="customUrl9" class="per-url-input" placeholder="https://..."></div>
+          <div><label>10. Daily Progress: </label><input type="text" id="customUrl10" class="per-url-input" placeholder="https://..."></div>
+          <button id="applyPerLinkBtn" style="grid-column: span 2; background: #527f62; border: none; color: white; border-radius: 40px; padding: 8px; margin-top: 8px;">✓ Save individual URLs from above fields</button>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <span>© GEPCO - HT/LT Works Online Monitoring System (Operational dashboard)</span>
+    <span class="update-info">🔄 Data source: Google Sheets (real-time refresh upon click)</span>
+  </div>
+</div>
+
+<script>
+  // Initial placeholder example links (demo google sheets placeholder format)
+  // These will be replaced by user provided google sheets links.
+  // We store default demo placeholders as example.
+  const DEFAULT_DEMO_LINKS = [
+    "https://docs.google.com/spreadsheets/d/1DEMO_LS_SITE_REPORT/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_LIVE_HT_LT/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_COMPLETED_WORKS/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_SUBDIVISION_WISE/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_HT_BREAKDOWNS/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_LT_CONSUMER/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_FEEDER_LOAD/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_TRANSFORMER_HEALTH/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_MATERIAL_STOCK/edit?usp=sharing",
+    "https://docs.google.com/spreadsheets/d/1DEMO_DAILY_PROGRESS/edit?usp=sharing"
+  ];
+
+  // actual link elements storage
+  const linkElements = [];
+  for (let i = 1; i <= 10; i++) {
+    linkElements.push(document.getElementById(`link${i}`));
+  }
+
+  // load stored URLs from localStorage if exist, else use demo placeholders
+  function loadStoredUrls() {
+    const stored = localStorage.getItem("gepco_monitor_urls_v1");
+    if (stored) {
+      try {
+        const urls = JSON.parse(stored);
+        if (Array.isArray(urls) && urls.length === 10) {
+          for (let i = 0; i < 10; i++) {
+            if (urls[i] && urls[i].trim() !== "") {
+              linkElements[i].href = urls[i];
+            } else {
+              linkElements[i].href = DEFAULT_DEMO_LINKS[i];
+            }
+          }
+          // update individual input fields
+          for (let i = 0; i < 10; i++) {
+            const inputField = document.getElementById(`customUrl${i+1}`);
+            if (inputField) inputField.value = linkElements[i].href;
+          }
+          return;
+        }
+      } catch(e) { console.warn(e); }
+    }
+    // else set default demo
+    for (let i = 0; i < 10; i++) {
+      linkElements[i].href = DEFAULT_DEMO_LINKS[i];
+      const inp = document.getElementById(`customUrl${i+1}`);
+      if (inp) inp.value = DEFAULT_DEMO_LINKS[i];
+    }
+  }
+
+  // save all current links to localStorage
+  function persistCurrentLinks() {
+    const currentUrls = linkElements.map(link => link.href);
+    localStorage.setItem("gepco_monitor_urls_v1", JSON.stringify(currentUrls));
+  }
+
+  // apply a single base URL to all links (append optional param for context but keep as full)
+  function applyBaseToAll(baseUrl) {
+    if (!baseUrl || baseUrl.trim() === "") {
+      alert("Please enter a valid Google Sheets URL (or spreadsheet link)");
+      return false;
+    }
+    let cleanUrl = baseUrl.trim();
+    // if it doesn't look like a sheet link, we still accept but warning
+    for (let i = 0; i < 10; i++) {
+      // optionally could add suffix per module? but we use same link for simplicity,
+      // though the idea is you can still later customize per link. For GEPCO user, they may have separate sheets per module.
+      // This sets all 10 to same (good for unified dashboard sheet)
+      linkElements[i].href = cleanUrl;
+      // also reflect into per-link custom fields
+      const inputField = document.getElementById(`customUrl${i+1}`);
+      if (inputField) inputField.value = cleanUrl;
+    }
+    persistCurrentLinks();
+    alert(`All 10 monitoring links now point to:\n${cleanUrl}\nYou can still adjust individually using per-link configuration.`);
+    return true;
+  }
+
+  // apply from per-link inputs (individual Google Sheets URLs)
+  function applyIndividualUrls() {
+    const newUrls = [];
+    for (let i = 1; i <= 10; i++) {
+      const inputVal = document.getElementById(`customUrl${i}`).value.trim();
+      if (inputVal === "") {
+        alert(`Link ${i} is empty, keeping previous URL. Please provide a URL for each module or use reset.`);
+        return false;
+      }
+      newUrls.push(inputVal);
+    }
+    for (let i = 0; i < 10; i++) {
+      linkElements[i].href = newUrls[i];
+    }
+    persistCurrentLinks();
+    alert("Successfully updated all 10 monitoring links with your custom Google Sheets URLs.");
+    return true;
+  }
+
+  function resetToDemoPlaceholders() {
+    for (let i = 0; i < 10; i++) {
+      linkElements[i].href = DEFAULT_DEMO_LINKS[i];
+      const inp = document.getElementById(`customUrl${i+1}`);
+      if (inp) inp.value = DEFAULT_DEMO_LINKS[i];
+    }
+    persistCurrentLinks();
+    alert("Demo placeholder sheet links restored. Replace with your official GEPCO google sheets URLs.");
+  }
+
+  // event listeners
+  document.getElementById("applyAllBtn").addEventListener("click", () => {
+    const baseInput = document.getElementById("globalSheetInput").value;
+    if (!baseInput) {
+      alert("Please paste your Google Sheets link in the field above (Default Sheet URL).");
+      return;
+    }
+    applyBaseToAll(baseInput);
+  });
+
+  document.getElementById("resetDemoBtn").addEventListener("click", resetToDemoPlaceholders);
+  document.getElementById("applyPerLinkBtn").addEventListener("click", applyIndividualUrls);
+  
+  // preview set button for convenience (same as apply all)
+  document.getElementById("previewSetBtn").addEventListener("click", () => {
+    const baseInput = document.getElementById("globalSheetInput").value;
+    if (!baseInput) {
+      alert("Enter a Google Sheets link first.");
+      return;
+    }
+    applyBaseToAll(baseInput);
+  });
+
+  // initialize
+  loadStoredUrls();
+
+  // additional comfort: when user manually change per-link inputs we could sync but not mandatory
+  // to ensure work consistency, after individual apply we already persist.
+  // add visual tooltip
+  console.log("GEPCO Monitoring Dashboard ready — paste your official Google Sheets links above.");
+</script>
+</body>
+</html>
