@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>GEPCO | HT/LT Works Dashboard - Apps Script Fixed</title>
+  <title>GEPCO | HT/LT Works Command Center</title>
   <style>
     * {
       margin: 0;
@@ -12,475 +12,596 @@
     }
 
     body {
-      background: linear-gradient(145deg, #eef2f7 0%, #d9e0e8 100%);
-      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #eef2f9;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
       min-height: 100vh;
+      color: #151e2f;
     }
 
+    /* refined login overlay */
     .login-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(18, 25, 45, 0.92);
+      backdrop-filter: blur(12px);
       z-index: 2000;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+
     .login-card {
-      background: white;
-      border-radius: 48px;
-      padding: 2.5rem;
-      max-width: 400px;
+      background: #ffffff;
+      border-radius: 2rem;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
       width: 90%;
-      box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+      box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.25);
       text-align: center;
-      animation: fadeInUp 0.4s ease;
+      transition: transform 0.2s;
     }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .login-card h2 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #0f3b2c, #1b6e48);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
     }
-    .login-card h2 { color: #1e4620; margin-bottom: 0.5rem; }
-    .login-card p { color: #4a6741; margin-bottom: 1.8rem; }
+
+    .login-card p {
+      color: #4b5e6e;
+      margin-bottom: 1.8rem;
+      font-weight: 450;
+    }
+
     .login-input {
       width: 100%;
       padding: 14px 18px;
-      margin: 12px 0;
+      margin: 10px 0;
       border-radius: 60px;
-      border: 1px solid #caddc2;
-      font-size: 1rem;
-      background: #fefcf5;
+      border: 1px solid #cfdfd3;
+      font-size: 0.95rem;
+      background: #fefcf8;
+      transition: all 0.2s;
       outline: none;
     }
-    .login-input:focus { border-color: #2b7a4b; box-shadow: 0 0 0 2px #2b7a4b30; }
+
+    .login-input:focus {
+      border-color: #1b6e48;
+      box-shadow: 0 0 0 3px rgba(27, 110, 72, 0.2);
+    }
+
     .login-btn {
-      background: #2b7a4b;
+      background: #1b6e48;
       color: white;
       border: none;
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       border-radius: 60px;
-      font-weight: bold;
+      font-weight: 600;
       font-size: 1rem;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 12px;
+      transition: background 0.2s;
     }
-    .login-btn:hover { background: #1e5f3a; }
-    .error-msg { color: #c7362b; font-size: 0.8rem; margin-top: 12px; }
 
-    .dashboard {
-      max-width: 1400px;
-      margin: 0 auto;
-      background: rgba(255,255,255,0.65);
-      backdrop-filter: blur(1px);
-      border-radius: 48px;
-      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.3);
-      padding: 2rem;
+    .login-btn:hover {
+      background: #0f4e33;
     }
-    .header {
+
+    .error-msg {
+      color: #c83e2b;
+      font-size: 0.8rem;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+
+    /* main dashboard container */
+    .dashboard-wrapper {
+      display: none;
+      background: #f4f7fc;
+      min-height: 100vh;
+      padding: 1.8rem 2rem;
+    }
+
+    .dashboard-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(2px);
+      border-radius: 2rem;
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      padding: 1.8rem 2rem;
+      transition: all 0.2s;
+    }
+
+    /* header branding */
+    .header-primary {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-end;
-      border-bottom: 3px solid #1e6f3f;
+      border-bottom: 2px solid rgba(27, 110, 72, 0.35);
       padding-bottom: 1.2rem;
-      margin-bottom: 2rem;
-      gap: 1rem;
+      margin-bottom: 1.8rem;
     }
-    .title-section h1 {
-      font-size: 2.2rem;
+
+    .brand h1 {
+      font-size: 1.9rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #1a472a, #2b7a4b);
+      letter-spacing: -0.3px;
+      background: linear-gradient(145deg, #174e36, #208a58);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
     }
-    .badge {
-      background: #1e6f3f20;
-      padding: 0.3rem 1rem;
-      border-radius: 40px;
+
+    .brand p {
+      color: #4a6f5e;
       font-size: 0.85rem;
-      font-weight: 600;
-      color: #0e4a2c;
-      border: 1px solid #92b4a2;
+      font-weight: 500;
+      margin-top: 4px;
     }
-    .stats-mini {
-      background: #ffffffee;
+
+    .header-stats {
+      background: #f0f4f0;
       padding: 0.5rem 1.2rem;
-      border-radius: 60px;
-      font-size: 0.9rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1b4e3a;
+      border: 1px solid #cde0d4;
     }
-    .nav-bar {
+
+    /* action bar */
+    .action-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.6rem;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.8rem;
     }
-    .back-button {
-      background: #2b5a3b;
-      border: none;
-      color: white;
-      padding: 0.5rem 1.5rem;
-      border-radius: 40px;
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #bdd0c2;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2rem;
       font-weight: 600;
+      font-size: 0.85rem;
       cursor: pointer;
+      transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      transition: 0.2s;
+      gap: 0.5rem;
+      color: #1f543b;
     }
-    .back-button:hover { background: #1e4620; transform: translateX(-3px); }
-    .logout-btn {
-      background: #8b6b4d;
+
+    .btn-outline:hover {
+      background: #eef3ea;
+      border-color: #1b6e48;
+      transform: translateX(-2px);
+    }
+
+    .btn-secondary {
+      background: #2c3e35;
       border: none;
       color: white;
       padding: 0.5rem 1.2rem;
-      border-radius: 40px;
+      border-radius: 2rem;
+      font-weight: 500;
       cursor: pointer;
-      font-weight: 600;
+      transition: 0.2s;
     }
-    .iframe-container {
-      background: #fff;
-      border-radius: 32px;
+
+    .btn-secondary:hover {
+      background: #1b2f26;
+    }
+
+    /* iframe panel */
+    .iframe-panel {
+      background: #ffffff;
+      border-radius: 1.5rem;
       overflow: hidden;
-      box-shadow: 0 12px 28px -8px rgba(0,0,0,0.2);
-      margin: 1rem 0 1.5rem 0;
-      border: 1px solid #d4e2ca;
+      box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.12);
+      margin: 1rem 0 2rem 0;
+      border: 1px solid #e2eddf;
     }
-    .sheet-iframe {
-      width: 100%;
-      height: 75vh;
-      min-height: 550px;
-      border: none;
-      background: white;
-    }
+
     .iframe-header {
-      background: #f9fbf8;
-      padding: 0.8rem 1.5rem;
+      background: #fbfef9;
+      padding: 0.9rem 1.8rem;
       border-bottom: 1px solid #e2ecd9;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 0.7rem;
     }
-    .current-title { font-weight: 700; color: #1f543b; }
-    .warning-badge {
-      font-size: 0.7rem;
-      color: #2b7a4b;
-      background: #e8f5e9;
-      padding: 4px 12px;
-      border-radius: 50px;
-    }
-    .links-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.4rem;
-      margin: 1.8rem 0;
-    }
-    .monitor-card {
-      background: white;
-      border-radius: 28px;
-      transition: all 0.2s;
-      box-shadow: 0 8px 18px -8px rgba(0,0,0,0.1);
-      border: 1px solid rgba(46,125,70,0.2);
-      cursor: pointer;
-    }
-    .monitor-card:hover { transform: translateY(-4px); border-color: #3c9e6b; }
-    .card-header {
-      background: #f9fbf9;
-      padding: 1rem 1.5rem;
-      border-bottom: 2px solid #e2ecd9;
+
+    .current-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #1c4f38;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
-    .card-icon { font-size: 2rem; }
-    .card-header h3 { font-size: 1.2rem; color: #1e4620; }
-    .card-desc { padding: 0.8rem 1.5rem; font-size: 0.8rem; color: #3d5a3c; }
-    .footer-note {
-      margin-top: 2rem;
-      text-align: center;
-      padding-top: 1rem;
-      border-top: 1px dashed #bcd0ae;
-      font-size: 0.8rem;
+
+    .embed-badge {
+      background: #eaefe7;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
       color: #2f6b47;
     }
-    .fix-instruction {
-      background: #1e4620;
-      color: white;
-      border-radius: 24px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      font-size: 0.85rem;
+
+    .sheet-iframe {
+      width: 100%;
+      height: 72vh;
+      min-height: 560px;
+      border: none;
+      background: #fff;
     }
-    .fix-instruction code {
-      background: #2b5a3b;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-family: monospace;
+
+    /* cards grid */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.3rem;
+      margin: 2rem 0 1rem;
     }
-    @media (max-width: 700px) {
-      .dashboard { padding: 1.2rem; }
-      .sheet-iframe { height: 60vh; }
+
+    .card-module {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      transition: all 0.2s ease;
+      border: 1px solid #e2eddf;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .card-module:hover {
+      transform: translateY(-4px);
+      border-color: #9bc0ab;
+      box-shadow: 0 15px 25px -12px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header-mod {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 1.2rem 1.3rem 0.7rem 1.3rem;
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .card-header-mod h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1e3a2f;
+    }
+
+    .card-desc-mod {
+      padding: 0 1.3rem 1.2rem 1.3rem;
+      font-size: 0.75rem;
+      color: #4c6b5b;
+      line-height: 1.4;
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      text-align: center;
+      border-top: 1px solid #dce8d4;
+      font-size: 0.7rem;
+      color: #6c8b78;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 680px) {
+      .dashboard-wrapper {
+        padding: 1rem;
+      }
+      .dashboard-container {
+        padding: 1.2rem;
+      }
+      .sheet-iframe {
+        height: 55vh;
+      }
+      .brand h1 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
 
+<!-- LOGIN OVERLAY -->
 <div id="loginOverlay" class="login-overlay">
   <div class="login-card">
-    <h2>🔐 GEPCO Portal</h2>
-    <p>HT/LT Works Monitoring System</p>
-    <input type="text" id="loginUser" class="login-input" placeholder="Username">
+    <h2>⚡ GEPCO</h2>
+    <p>HT/LT Works · Intelligent Monitoring</p>
+    <input type="text" id="loginUser" class="login-input" placeholder="Username" autocomplete="off">
     <input type="password" id="loginPass" class="login-input" placeholder="Password">
-    <button id="loginBtn" class="login-btn">Enter Dashboard →</button>
+    <button id="loginBtn" class="login-btn">Access Control Room →</button>
     <div id="loginError" class="error-msg"></div>
-    <div style="margin-top: 20px; font-size: 0.7rem; color: #8aa07e;">Demo: admin / gepco2025</div>
+    <div style="margin-top: 18px; font-size: 0.7rem; color: #8aa681;">authorized personnel only</div>
   </div>
 </div>
 
-<div id="mainDashboard" style="display: none; padding: 2rem 1.5rem;">
-<div class="dashboard">
-  <div class="header">
-    <div class="title-section">
-      <h1>⚡ GEPCO · HT/LT Works Dashboard</h1>
-      <p><span class="badge">🔐 Secure Access</span><span class="badge">📡 Iframe Fixed</span><span class="badge">✅ X-Frame-Options ALLOWALL</span></p>
+<!-- MAIN DASHBOARD -->
+<div id="mainDashboard" class="dashboard-wrapper">
+  <div class="dashboard-container">
+    <div class="header-primary">
+      <div class="brand">
+        <h1>🔌 GEPCO · HT/LT Works Command Center</h1>
+        <p>Real-time project insights · field operations dashboard</p>
+      </div>
+      <div class="header-stats">
+        📍 10 live modules · embedded viewer
+      </div>
     </div>
-    <div class="stats-mini">📋 10 Modules &nbsp;|&nbsp; 🛡️ Embedded Viewer</div>
-  </div>
-  
-  <div class="fix-instruction">
-    ✅ <strong>FIX APPLIED:</strong> Your Apps Script now includes <code>.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)</code><br>
-    This allows the LS Site Report to be embedded inside this dashboard. No more login popups!
-  </div>
-  
-  <div class="nav-bar">
-    <button id="backButton" class="back-button">← Back to Previous</button>
-    <button id="logoutButton" class="logout-btn">🚪 Logout</button>
-  </div>
-  
-  <div class="iframe-container">
-    <div class="iframe-header">
-      <span class="current-title" id="currentSheetTitle">📄 Select a monitoring module</span>
-      <span class="warning-badge">🔒 Embedded with X-Frame-Options ALLOWALL</span>
+
+    <div class="action-bar">
+      <button id="backButton" class="btn-outline">← Back to previous</button>
+      <button id="logoutButton" class="btn-secondary">🚪 Exit dashboard</button>
     </div>
-    <iframe id="sheetFrame" class="sheet-iframe" src="about:blank" title="GEPCO Viewer" sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"></iframe>
+
+    <!-- iframe viewer -->
+    <div class="iframe-panel">
+      <div class="iframe-header">
+        <div class="current-title">
+          <span>📄</span> <span id="currentSheetTitle">Select a monitoring module</span>
+        </div>
+        <div class="embed-badge">🔒 secure embedded view</div>
+      </div>
+      <iframe id="sheetFrame" class="sheet-iframe" src="about:blank" title="GEPCO Works Viewer" sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"></iframe>
+    </div>
+
+    <!-- interactive cards -->
+    <div class="modules-grid" id="linksGrid"></div>
+
+    <div class="footer-note">
+      <span>© GEPCO · Infrastructure monitoring system</span>
+      <span>🔐 Authorized access only</span>
+    </div>
   </div>
-  
-  <div class="links-grid" id="linksGrid"></div>
-  
-  <div class="footer-note">
-    <span>© GEPCO - Apps Script Web App now allows embedding via XFrameOptionsMode.ALLOWALL</span>
-    <span>🔐 LS Site Report (Apps Script) works perfectly inside iframe</span>
-  </div>
-</div>
 </div>
 
 <script>
-  // ============================================================
-  // CREDENTIALS
-  // ============================================================
+  // ----------------------------------------------
+  // CREDENTIALS (secure but demo purpose)
+  // ----------------------------------------------
   const VALID_USER = "admin";
   const VALID_PASS = "gepco2025";
 
-  // ============================================================
-  // CARD DATA - Now the Apps Script URL will work because 
-  // we updated the Apps Script code with .setXFrameOptionsMode(ALLOWALL)
-  // ============================================================
-  
-  const cardData = [
-    { 
-      id: "link1", 
-      name: "LS Site Report (Apps Script)", 
-      icon: "📋", 
-      desc: "Pre-commencement safety & line survey · Before starting work checklist.", 
-      // ORIGINAL APPS SCRIPT URL - NOW WORKS because X-Frame-Options is set to ALLOWALL
+  // ----------------------------------------------
+  // MODULE DATA (clean, professional)
+  // - The Apps Script embed uses .setXFrameOptionsMode(ALLOWALL) implementation
+  // ----------------------------------------------
+  const modules = [
+    {
+      id: "module_ls",
+      name: "LS Site Report",
+      icon: "📋",
+      desc: "Pre-commencement safety & line survey · before-start compliance",
       url: "https://script.google.com/macros/s/AKfycby7flY3qHauOUfQh6KZRBDUKaaTXZCdJdRoYrXw4UBAo06tbmVOJMCj6s1eYTcP47e8nQ/exec"
     },
-    { 
-      id: "link2", 
-      name: "Live LT/HT Works", 
-      icon: "⚡", 
-      desc: "Active sites · real-time conductor stringing, pole erection, transformer maintenance.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=2011569225&single=true" 
+    {
+      id: "module_live",
+      name: "Live LT/HT Works",
+      icon: "⚡",
+      desc: "Active sites · conductor stringing, pole erection, transformer maintenance",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=2011569225&single=true"
     },
-    { 
-      id: "link3", 
-      name: "Completed Works", 
-      icon: "✅", 
-      desc: "HT/LT projects · final commissioning reports, closure certifications.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=1624422104&single=true" 
+    {
+      id: "module_completed",
+      name: "Completed Works",
+      icon: "✅",
+      desc: "HT/LT projects · final commissioning & closure certifications",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=1624422104&single=true"
     },
-    { 
-      id: "link4", 
-      name: "Sub Division Wise Works", 
-      icon: "🗺️", 
-      desc: "Division-level filtering: City, Rural, Industrial subdivisions.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=270755340&single=true" 
+    {
+      id: "module_subdiv",
+      name: "Sub Division Wise Works",
+      icon: "🗺️",
+      desc: "Division-level filtering: City, Rural, Industrial subdivisions",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=270755340&single=true"
     },
-    { 
-      id: "link5", 
-      name: "HT Line Breakdowns", 
-      icon: "⚠️", 
-      desc: "High Tension fault alerts, restoration status, feeder wise downtime.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=0&single=true" 
+    {
+      id: "module_ht_break",
+      name: "HT Line Breakdowns",
+      icon: "⚠️",
+      desc: "High Tension fault alerts, restoration status, feeder wise downtime",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=0&single=true"
     },
-    { 
-      id: "link6", 
-      name: "LT Consumer Requests", 
-      icon: "🏠", 
-      desc: "New connections, service line extensions, meter installation tracking.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml" 
+    {
+      id: "module_lt_req",
+      name: "LT Consumer Requests",
+      icon: "🏠",
+      desc: "New connections, service line extensions, meter installation tracking",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     },
-    { 
-      id: "link7", 
-      name: "Feeder wise Load Mgmt", 
-      icon: "📊", 
-      desc: "HT/LT feeder analytics, peak load, overloading alerts.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml" 
+    {
+      id: "module_load_mgmt",
+      name: "Feeder wise Load Mgmt",
+      icon: "📊",
+      desc: "HT/LT feeder analytics, peak load, overloading alerts",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     },
-    { 
-      id: "link8", 
-      name: "Transformer Health", 
-      icon: "🔧", 
-      desc: "Distribution transformers oil level, thermal imaging, maintenance schedule.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml" 
+    {
+      id: "module_tf_health",
+      name: "Transformer Health",
+      icon: "🔧",
+      desc: "Distribution transformers oil level, thermal imaging, maintenance schedule",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     },
-    { 
-      id: "link9", 
-      name: "Material / Inventory Tracker", 
-      icon: "📦", 
-      desc: "Cable, poles, conductors stock status for ongoing projects.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml" 
+    {
+      id: "module_inventory",
+      name: "Material / Inventory Tracker",
+      icon: "📦",
+      desc: "Cable, poles, conductors stock status for ongoing projects",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     },
-    { 
-      id: "link10", 
-      name: "Daily Progress Report", 
-      icon: "📈", 
-      desc: "Consolidated HT/LT achievement, contractor wise performance.", 
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml" 
+    {
+      id: "module_daily",
+      name: "Daily Progress Report",
+      icon: "📈",
+      desc: "Consolidated HT/LT achievement, contractor wise performance",
+      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     }
   ];
 
-  let iframe = null;
-  let currentTitleSpan = null;
+  // dom elements
+  let iframeElement = null;
+  let titleSpan = null;
   let currentLoadedUrl = "";
-  let navigationStack = [];
+  let navigationHistory = [];   // stores { url, title }
 
-  function renderCards() {
+  // Helper: load sheet into iframe
+  function loadModule(url, title) {
+    if (!iframeElement || !titleSpan) return;
+    if (currentLoadedUrl === url) return; // already loaded
+
+    // push current to history if it's not empty and not about:blank
+    if (currentLoadedUrl && currentLoadedUrl !== "about:blank") {
+      const prevTitle = titleSpan.innerText.replace(/^📄\s*/, "");
+      navigationHistory.push({ url: currentLoadedUrl, title: prevTitle });
+      if (navigationHistory.length > 25) navigationHistory.shift();
+    }
+
+    iframeElement.src = url;
+    currentLoadedUrl = url;
+    titleSpan.innerHTML = `📄 ${title}`;
+  }
+
+  // go back in navigation history
+  function handleBack() {
+    if (navigationHistory.length === 0) {
+      // reset to empty state
+      if (currentLoadedUrl && currentLoadedUrl !== "about:blank") {
+        titleSpan.innerHTML = `📄 Select a monitoring module`;
+        iframeElement.src = "about:blank";
+        currentLoadedUrl = "";
+      } else {
+        if (iframeElement) iframeElement.src = "about:blank";
+        titleSpan.innerHTML = `📄 Select a monitoring module`;
+        currentLoadedUrl = "";
+      }
+      return;
+    }
+    const prev = navigationHistory.pop();
+    iframeElement.src = prev.url;
+    currentLoadedUrl = prev.url;
+    titleSpan.innerHTML = `📄 ${prev.title}`;
+  }
+
+  // render module cards
+  function renderModules() {
     const grid = document.getElementById("linksGrid");
     if (!grid) return;
-    let html = '';
-    cardData.forEach((card, idx) => {
-      html += `
-        <div class="monitor-card" data-card-index="${idx}">
-          <div class="card-header">
-            <div class="card-icon">${card.icon}</div>
-            <h3>${card.name}</h3>
+    let cardsHtml = "";
+    modules.forEach((mod, idx) => {
+      cardsHtml += `
+        <div class="card-module" data-module-index="${idx}">
+          <div class="card-header-mod">
+            <div class="card-icon">${mod.icon}</div>
+            <h3>${mod.name}</h3>
           </div>
-          <div class="card-desc">${card.desc}</div>
+          <div class="card-desc-mod">${mod.desc}</div>
         </div>
       `;
     });
-    grid.innerHTML = html;
-    document.querySelectorAll('.monitor-card').forEach(card => {
+    grid.innerHTML = cardsHtml;
+    // attach click events
+    document.querySelectorAll('.card-module').forEach(card => {
       card.addEventListener('click', (e) => {
-        const idx = card.getAttribute('data-card-index');
-        if (idx !== null && cardData[idx]) {
-          loadSheetIntoIframe(cardData[idx].url, cardData[idx].name);
+        const idxAttr = card.getAttribute('data-module-index');
+        if (idxAttr !== null && modules[idxAttr]) {
+          const target = modules[idxAttr];
+          loadModule(target.url, target.name);
         }
       });
     });
   }
 
-  function loadSheetIntoIframe(url, title) {
-    if (!iframe || !currentTitleSpan) return;
-    
-    if (currentLoadedUrl === url) return;
-    
-    if (currentLoadedUrl && currentLoadedUrl !== "about:blank") {
-      const previousTitle = currentTitleSpan.innerText.replace("📄 ", "");
-      navigationStack.push({ url: currentLoadedUrl, title: previousTitle });
-      if (navigationStack.length > 30) navigationStack.shift();
-    }
-    
-    iframe.src = url;
-    currentLoadedUrl = url;
-    currentTitleSpan.innerHTML = `📄 ${title}`;
-    
-    console.log(`Loaded: ${title} -> ${url}`);
-  }
-
-  function goBack() {
-    if (navigationStack.length === 0) {
-      if (currentLoadedUrl && currentLoadedUrl !== "about:blank") {
-        currentTitleSpan.innerHTML = `📄 No previous · Select module`;
-        iframe.src = "about:blank";
-        currentLoadedUrl = "";
-      } else {
-        currentTitleSpan.innerHTML = `📄 Select a monitoring module`;
-        iframe.src = "about:blank";
-        currentLoadedUrl = "";
-      }
-      return;
-    }
-    const previous = navigationStack.pop();
-    iframe.src = previous.url;
-    currentLoadedUrl = previous.url;
-    currentTitleSpan.innerHTML = `📄 ${previous.title}`;
-  }
-
-  function logout() {
+  // logout procedure
+  function logoutAndReset() {
     localStorage.removeItem("gepco_auth");
     document.getElementById("mainDashboard").style.display = "none";
     document.getElementById("loginOverlay").style.display = "flex";
-    if (iframe) iframe.src = "about:blank";
+    if (iframeElement) {
+      iframeElement.src = "about:blank";
+    }
     currentLoadedUrl = "";
-    navigationStack = [];
-    if (currentTitleSpan) currentTitleSpan.innerHTML = "📄 Select a monitoring module";
+    navigationHistory = [];
+    if (titleSpan) titleSpan.innerHTML = "📄 Select a monitoring module";
+    // clear login fields
+    document.getElementById("loginUser").value = "";
+    document.getElementById("loginPass").value = "";
   }
 
+  // authenticate and show dashboard
   function attemptLogin() {
     const username = document.getElementById("loginUser").value.trim();
     const password = document.getElementById("loginPass").value.trim();
-    const errorSpan = document.getElementById("loginError");
-    
+    const errorDiv = document.getElementById("loginError");
     if (username === VALID_USER && password === VALID_PASS) {
       localStorage.setItem("gepco_auth", "true");
       showDashboard();
     } else {
-      errorSpan.innerText = "❌ Invalid credentials. Access denied.";
-      setTimeout(() => { errorSpan.innerText = ""; }, 2000);
+      errorDiv.innerText = "Access denied · Invalid credentials";
+      setTimeout(() => {
+        if (errorDiv) errorDiv.innerText = "";
+      }, 2000);
     }
   }
 
   function showDashboard() {
-    document.getElementById("loginOverlay").style.display = "none";
-    document.getElementById("mainDashboard").style.display = "block";
-    iframe = document.getElementById("sheetFrame");
-    currentTitleSpan = document.getElementById("currentSheetTitle");
-    iframe.src = "about:blank";
+    const loginOverlay = document.getElementById("loginOverlay");
+    const mainDash = document.getElementById("mainDashboard");
+    if (loginOverlay) loginOverlay.style.display = "none";
+    if (mainDash) mainDash.style.display = "block";
+
+    iframeElement = document.getElementById("sheetFrame");
+    titleSpan = document.getElementById("currentSheetTitle");
+
+    // reset state
+    if (iframeElement) iframeElement.src = "about:blank";
     currentLoadedUrl = "";
-    navigationStack = [];
-    currentTitleSpan.innerHTML = "📄 Select a monitoring module";
-    
-    iframe.addEventListener("contextmenu", (e) => {
-      e.preventDefault();
-      alert("🔒 Right-click disabled. Sheet cannot be opened separately for security.");
-      return false;
-    });
+    navigationHistory = [];
+    if (titleSpan) titleSpan.innerHTML = "📄 Select a monitoring module";
+
+    // optional: right-click restriction for extra security (prevents opening frame in new tab easily)
+    if (iframeElement) {
+      iframeElement.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        return false;
+      });
+    }
+    renderModules(); // ensure fresh cards are rendered
   }
 
-  function checkAuth() {
-    const auth = localStorage.getItem("gepco_auth");
-    if (auth === "true") {
+  // check authentication on load
+  function checkAuthentication() {
+    const authFlag = localStorage.getItem("gepco_auth");
+    if (authFlag === "true") {
       showDashboard();
     } else {
       document.getElementById("loginOverlay").style.display = "flex";
@@ -488,26 +609,41 @@
     }
   }
 
-  function setupEvents() {
-    document.getElementById("loginBtn")?.addEventListener("click", attemptLogin);
-    document.getElementById("logoutButton")?.addEventListener("click", logout);
-    document.getElementById("backButton")?.addEventListener("click", goBack);
-    
+  function bindEventListeners() {
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutButton");
+    const backBtn = document.getElementById("backButton");
+
+    if (loginBtn) loginBtn.addEventListener("click", attemptLogin);
+    if (logoutBtn) logoutBtn.addEventListener("click", logoutAndReset);
+    if (backBtn) backBtn.addEventListener("click", handleBack);
+
+    // allow enter key on login fields
     const userField = document.getElementById("loginUser");
     const passField = document.getElementById("loginPass");
-    const handleEnter = (e) => { if (e.key === "Enter") attemptLogin(); };
-    userField?.addEventListener("keypress", handleEnter);
-    passField?.addEventListener("keypress", handleEnter);
-    
-    renderCards();
+    const onEnter = (e) => { if (e.key === "Enter") attemptLogin(); };
+    if (userField) userField.addEventListener("keypress", onEnter);
+    if (passField) passField.addEventListener("keypress", onEnter);
   }
 
+  // initial setup
   document.addEventListener("DOMContentLoaded", () => {
-    setupEvents();
-    checkAuth();
-    console.log("✅ GEPCO Dashboard Ready");
-    console.log("✅ Apps Script now uses .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)");
-    console.log("✅ LS Site Report will now embed correctly without login popups");
+    bindEventListeners();
+    checkAuthentication();
+    // ensure iframe references after dynamic show
+    const iframeWatcher = setInterval(() => {
+      if (document.getElementById("sheetFrame")) {
+        iframeElement = document.getElementById("sheetFrame");
+        titleSpan = document.getElementById("currentSheetTitle");
+        if (iframeElement && titleSpan && document.getElementById("mainDashboard").style.display === "block") {
+          if (!currentLoadedUrl) {
+            iframeElement.src = "about:blank";
+            titleSpan.innerHTML = "📄 Select a monitoring module";
+          }
+        }
+        clearInterval(iframeWatcher);
+      }
+    }, 200);
   });
 </script>
 </body>
