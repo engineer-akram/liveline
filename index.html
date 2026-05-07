@@ -2,79 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>GEPCO | HT/LT Works Command Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>GEPCO | HT/LT Command Center</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background: #eef2f9;
-      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
       min-height: 100vh;
-      color: #151e2f;
+      color: #1a2a2f;
     }
 
-    /* refined login overlay */
+    /* refined login - touch friendly */
     .login-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(18, 25, 45, 0.92);
+      background: rgba(10, 25, 30, 0.94);
       backdrop-filter: blur(12px);
       z-index: 2000;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 1.5rem;
     }
 
     .login-card {
       background: #ffffff;
       border-radius: 2rem;
-      padding: 2.5rem 2rem;
-      max-width: 420px;
-      width: 90%;
-      box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.25);
+      padding: 2rem 1.5rem;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35);
       text-align: center;
-      transition: transform 0.2s;
+      transition: transform 0.2s ease;
     }
 
     .login-card h2 {
-      font-size: 1.9rem;
-      font-weight: 600;
-      background: linear-gradient(135deg, #0f3b2c, #1b6e48);
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1b5e3f, #2a8b5c);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
-      margin-bottom: 0.5rem;
+      letter-spacing: -0.3px;
     }
 
     .login-card p {
-      color: #4b5e6e;
-      margin-bottom: 1.8rem;
+      color: #4f6b5c;
+      margin: 0.5rem 0 1.5rem 0;
       font-weight: 450;
     }
 
     .login-input {
       width: 100%;
-      padding: 14px 18px;
-      margin: 10px 0;
-      border-radius: 60px;
+      padding: 1rem 1.2rem;
+      margin: 0.6rem 0;
+      border-radius: 3rem;
       border: 1px solid #cfdfd3;
-      font-size: 0.95rem;
-      background: #fefcf8;
+      font-size: 1rem;
+      background: #fefcf7;
       transition: all 0.2s;
       outline: none;
     }
 
     .login-input:focus {
-      border-color: #1b6e48;
-      box-shadow: 0 0 0 3px rgba(27, 110, 72, 0.2);
+      border-color: #2a8b5c;
+      box-shadow: 0 0 0 3px rgba(42, 139, 92, 0.2);
     }
 
     .login-btn {
@@ -82,231 +84,223 @@
       color: white;
       border: none;
       width: 100%;
-      padding: 13px;
-      border-radius: 60px;
+      padding: 0.9rem;
+      border-radius: 3rem;
       font-weight: 600;
       font-size: 1rem;
       cursor: pointer;
-      margin-top: 12px;
+      margin-top: 1rem;
       transition: background 0.2s;
     }
 
-    .login-btn:hover {
-      background: #0f4e33;
-    }
+    .login-btn:active { background: #0f4e33; transform: scale(0.98); }
+    .error-msg { color: #cb3b2b; font-size: 0.75rem; margin-top: 0.8rem; font-weight: 500; }
 
-    .error-msg {
-      color: #c83e2b;
-      font-size: 0.8rem;
-      margin-top: 12px;
-      font-weight: 500;
-    }
-
-    /* main dashboard container */
+    /* MAIN DASHBOARD - fully responsive */
     .dashboard-wrapper {
       display: none;
-      background: #f4f7fc;
+      background: #f4f8fe;
       min-height: 100vh;
-      padding: 1.8rem 2rem;
+      padding: 0.75rem;
     }
 
     .dashboard-container {
-      max-width: 1440px;
+      max-width: 1300px;
       margin: 0 auto;
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(2px);
-      border-radius: 2rem;
-      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+      border-radius: 1.8rem;
+      box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.08);
       overflow: hidden;
-      padding: 1.8rem 2rem;
-      transition: all 0.2s;
+      padding: 1.2rem;
     }
 
-    /* header branding */
+    /* mobile-first header */
     .header-primary {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: flex-end;
-      border-bottom: 2px solid rgba(27, 110, 72, 0.35);
-      padding-bottom: 1.2rem;
-      margin-bottom: 1.8rem;
+      flex-direction: column;
+      gap: 0.6rem;
+      border-bottom: 2px solid rgba(27, 110, 72, 0.25);
+      padding-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     .brand h1 {
-      font-size: 1.9rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      letter-spacing: -0.3px;
-      background: linear-gradient(145deg, #174e36, #208a58);
+      line-height: 1.25;
+      background: linear-gradient(145deg, #174e36, #1f7e52);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
     }
 
     .brand p {
-      color: #4a6f5e;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
+      color: #5a7a68;
       font-weight: 500;
-      margin-top: 4px;
     }
 
     .header-stats {
-      background: #f0f4f0;
-      padding: 0.5rem 1.2rem;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #1b4e3a;
+      background: #eef3ea;
+      padding: 0.4rem 1rem;
+      border-radius: 3rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #236b47;
+      align-self: flex-start;
       border: 1px solid #cde0d4;
     }
 
-    /* action bar */
+    /* action bar - flexible */
     .action-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.6rem;
-      flex-wrap: wrap;
       gap: 0.8rem;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
     }
 
     .btn-outline {
       background: transparent;
       border: 1px solid #bdd0c2;
-      padding: 0.5rem 1.2rem;
-      border-radius: 2rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 3rem;
       font-weight: 600;
       font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
       color: #1f543b;
     }
 
-    .btn-outline:hover {
-      background: #eef3ea;
-      border-color: #1b6e48;
-      transform: translateX(-2px);
-    }
-
+    .btn-outline:active { background: #e2ecd9; transform: scale(0.97); }
     .btn-secondary {
       background: #2c3e35;
       border: none;
       color: white;
-      padding: 0.5rem 1.2rem;
-      border-radius: 2rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 3rem;
       font-weight: 500;
       cursor: pointer;
       transition: 0.2s;
     }
+    .btn-secondary:active { background: #1b2f26; transform: scale(0.97); }
 
-    .btn-secondary:hover {
-      background: #1b2f26;
-    }
-
-    /* iframe panel */
+    /* iframe panel - fully responsive height */
     .iframe-panel {
       background: #ffffff;
       border-radius: 1.5rem;
       overflow: hidden;
-      box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.12);
-      margin: 1rem 0 2rem 0;
+      box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.08);
+      margin: 1rem 0 1.6rem;
       border: 1px solid #e2eddf;
     }
 
     .iframe-header {
       background: #fbfef9;
-      padding: 0.9rem 1.8rem;
+      padding: 0.7rem 1.2rem;
       border-bottom: 1px solid #e2ecd9;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0.7rem;
+      gap: 0.5rem;
     }
 
     .current-title {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #1c4f38;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      word-break: break-word;
     }
 
     .embed-badge {
       background: #eaefe7;
-      padding: 0.2rem 0.8rem;
+      padding: 0.2rem 0.7rem;
       border-radius: 40px;
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       font-weight: 600;
       color: #2f6b47;
     }
 
     .sheet-iframe {
       width: 100%;
-      height: 72vh;
-      min-height: 560px;
+      height: 58vh;
+      min-height: 420px;
       border: none;
       background: #fff;
     }
 
-    /* cards grid */
+    /* mobile iframe height adjust */
+    @media (max-width: 640px) {
+      .sheet-iframe {
+        height: 65vh;
+        min-height: 480px;
+      }
+    }
+
+    /* cards grid - touch optimized */
     .modules-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 1.3rem;
-      margin: 2rem 0 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 0.8rem;
     }
 
     .card-module {
       background: #ffffff;
-      border-radius: 1.5rem;
+      border-radius: 1.4rem;
       transition: all 0.2s ease;
       border: 1px solid #e2eddf;
       cursor: pointer;
       overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .card-module:hover {
-      transform: translateY(-4px);
+    .card-module:active {
+      transform: scale(0.98);
+      background: #fafef7;
       border-color: #9bc0ab;
-      box-shadow: 0 15px 25px -12px rgba(0, 0, 0, 0.12);
     }
 
     .card-header-mod {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 1.2rem 1.3rem 0.7rem 1.3rem;
+      padding: 1rem 1.2rem 0.4rem 1.2rem;
     }
 
     .card-icon {
-      font-size: 2rem;
+      font-size: 1.9rem;
       line-height: 1;
     }
 
     .card-header-mod h3 {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #1e3a2f;
     }
 
     .card-desc-mod {
-      padding: 0 1.3rem 1.2rem 1.3rem;
-      font-size: 0.75rem;
+      padding: 0 1.2rem 1rem 1.2rem;
+      font-size: 0.7rem;
       color: #4c6b5b;
       line-height: 1.4;
     }
 
     .footer-note {
-      margin-top: 2rem;
+      margin-top: 1.8rem;
       padding-top: 1rem;
       text-align: center;
       border-top: 1px solid #dce8d4;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: #6c8b78;
       display: flex;
       justify-content: center;
@@ -314,153 +308,169 @@
       flex-wrap: wrap;
     }
 
-    @media (max-width: 680px) {
-      .dashboard-wrapper {
+    /* extra touch improvements */
+    button, .card-module, .login-btn {
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 480px) {
+      .dashboard-container {
         padding: 1rem;
       }
-      .dashboard-container {
-        padding: 1.2rem;
-      }
-      .sheet-iframe {
-        height: 55vh;
-      }
       .brand h1 {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
+      }
+      .header-stats {
+        font-size: 0.65rem;
+      }
+      .btn-outline, .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+      }
+      .current-title {
+        font-size: 0.8rem;
+      }
+      .modules-grid {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+      }
+    }
+
+    /* small landscape optimization */
+    @media (max-width: 760px) and (orientation: landscape) {
+      .sheet-iframe {
+        height: 62vh;
+        min-height: 340px;
+      }
+      .modules-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       }
     }
   </style>
 </head>
 <body>
 
-<!-- LOGIN OVERLAY -->
+<!-- LOGIN MODAL - TOUCH FIRST -->
 <div id="loginOverlay" class="login-overlay">
   <div class="login-card">
     <h2>⚡ GEPCO</h2>
-    <p>HT/LT Works · Intelligent Monitoring</p>
-    <input type="text" id="loginUser" class="login-input" placeholder="Username" autocomplete="off">
-    <input type="password" id="loginPass" class="login-input" placeholder="Password">
-    <button id="loginBtn" class="login-btn">Access Control Room →</button>
+    <p>HT/LT Works · Field Intelligence</p>
+    <input type="text" id="loginUser" class="login-input" placeholder="Username" autocomplete="off" inputmode="text">
+    <input type="password" id="loginPass" class="login-input" placeholder="Password" autocomplete="off">
+    <button id="loginBtn" class="login-btn">Access Dashboard →</button>
     <div id="loginError" class="error-msg"></div>
-    <div style="margin-top: 18px; font-size: 0.7rem; color: #8aa681;">authorized personnel only</div>
+    <div style="margin-top: 1rem; font-size: 0.65rem; color: #8aa681;">Authorized personnel only</div>
   </div>
 </div>
 
-<!-- MAIN DASHBOARD -->
+<!-- MAIN DASHBOARD (mobile responsive) -->
 <div id="mainDashboard" class="dashboard-wrapper">
   <div class="dashboard-container">
     <div class="header-primary">
       <div class="brand">
-        <h1>🔌 GEPCO · HT/LT Works Command Center</h1>
-        <p>Real-time project insights · field operations dashboard</p>
+        <h1>🔌 GEPCO · HT/LT Command Center</h1>
+        <p>Real‑time works · embedded oversight</p>
       </div>
       <div class="header-stats">
-        📍 10 live modules · embedded viewer
+        📋 10 active modules
       </div>
     </div>
 
     <div class="action-bar">
-      <button id="backButton" class="btn-outline">← Back to previous</button>
-      <button id="logoutButton" class="btn-secondary">🚪 Exit dashboard</button>
+      <button id="backButton" class="btn-outline" aria-label="Go back">← Back</button>
+      <button id="logoutButton" class="btn-secondary" aria-label="Logout">🚪 Exit</button>
     </div>
 
-    <!-- iframe viewer -->
+    <!-- iframe viewer for reports -->
     <div class="iframe-panel">
       <div class="iframe-header">
         <div class="current-title">
-          <span>📄</span> <span id="currentSheetTitle">Select a monitoring module</span>
+          <span>📄</span> <span id="currentSheetTitle">Select a module</span>
         </div>
-        <div class="embed-badge">🔒 secure embedded view</div>
+        <div class="embed-badge">🔒 secure viewer</div>
       </div>
       <iframe id="sheetFrame" class="sheet-iframe" src="about:blank" title="GEPCO Works Viewer" sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"></iframe>
     </div>
 
-    <!-- interactive cards -->
+    <!-- dynamic modules grid -->
     <div class="modules-grid" id="linksGrid"></div>
 
     <div class="footer-note">
-      <span>© GEPCO · Infrastructure monitoring system</span>
-      <span>🔐 Authorized access only</span>
+      <span>© GEPCO · infrastructure monitoring</span>
+      <span>🔐 secure embedded view</span>
     </div>
   </div>
 </div>
 
 <script>
-  // ----------------------------------------------
-  // CREDENTIALS (secure but demo purpose)
-  // ----------------------------------------------
+  // --------------------------------------------------------------
+  // CREDENTIALS (secure demo)
+  // --------------------------------------------------------------
   const VALID_USER = "admin";
   const VALID_PASS = "gepco2025";
 
-  // ----------------------------------------------
-  // MODULE DATA (clean, professional)
-  // - The Apps Script embed uses .setXFrameOptionsMode(ALLOWALL) implementation
-  // ----------------------------------------------
+  // --------------------------------------------------------------
+  // MODULES DATA - includes original Apps Script URL (with ALLOWALL fix applied)
+  // and all other Google Sheets views.
+  // The Apps Script web app now correctly uses XFrameOptionsMode.ALLOWALL
+  // --------------------------------------------------------------
   const modules = [
     {
-      id: "module_ls",
       name: "LS Site Report",
       icon: "📋",
       desc: "Pre-commencement safety & line survey · before-start compliance",
       url: "https://script.google.com/macros/s/AKfycby7flY3qHauOUfQh6KZRBDUKaaTXZCdJdRoYrXw4UBAo06tbmVOJMCj6s1eYTcP47e8nQ/exec"
     },
     {
-      id: "module_live",
       name: "Live LT/HT Works",
       icon: "⚡",
       desc: "Active sites · conductor stringing, pole erection, transformer maintenance",
       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=2011569225&single=true"
     },
     {
-      id: "module_completed",
       name: "Completed Works",
       icon: "✅",
       desc: "HT/LT projects · final commissioning & closure certifications",
       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=1624422104&single=true"
     },
     {
-      id: "module_subdiv",
       name: "Sub Division Wise Works",
       icon: "🗺️",
       desc: "Division-level filtering: City, Rural, Industrial subdivisions",
       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=270755340&single=true"
     },
     {
-      id: "module_ht_break",
       name: "HT Line Breakdowns",
       icon: "⚠️",
       desc: "High Tension fault alerts, restoration status, feeder wise downtime",
       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=0&single=true"
     },
     {
-      id: "module_lt_req",
       name: "LT Consumer Requests",
       icon: "🏠",
       desc: "New connections, service line extensions, meter installation tracking",
       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     },
     {
-      id: "module_load_mgmt",
       name: "Feeder wise Load Mgmt",
       icon: "📊",
       desc: "HT/LT feeder analytics, peak load, overloading alerts",
       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     },
     {
-      id: "module_tf_health",
       name: "Transformer Health",
       icon: "🔧",
       desc: "Distribution transformers oil level, thermal imaging, maintenance schedule",
       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     },
     {
-      id: "module_inventory",
       name: "Material / Inventory Tracker",
       icon: "📦",
       desc: "Cable, poles, conductors stock status for ongoing projects",
       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
     },
     {
-      id: "module_daily",
       name: "Daily Progress Report",
       icon: "📈",
       desc: "Consolidated HT/LT achievement, contractor wise performance",
@@ -468,58 +478,59 @@
     }
   ];
 
-  // dom elements
-  let iframeElement = null;
-  let titleSpan = null;
-  let currentLoadedUrl = "";
-  let navigationHistory = [];   // stores { url, title }
+  // DOM elements
+  let iframeRef = null;
+  let titleSpanRef = null;
+  let currentUrl = "";
+  let navStack = [];  // stores { url, title }
 
-  // Helper: load sheet into iframe
-  function loadModule(url, title) {
-    if (!iframeElement || !titleSpan) return;
-    if (currentLoadedUrl === url) return; // already loaded
+  // load module into iframe, save current for back navigation
+  function loadModuleIntoIframe(url, title) {
+    if (!iframeRef || !titleSpanRef) return;
+    if (currentUrl === url) return;
 
-    // push current to history if it's not empty and not about:blank
-    if (currentLoadedUrl && currentLoadedUrl !== "about:blank") {
-      const prevTitle = titleSpan.innerText.replace(/^📄\s*/, "");
-      navigationHistory.push({ url: currentLoadedUrl, title: prevTitle });
-      if (navigationHistory.length > 25) navigationHistory.shift();
+    // save previous state if not blank
+    if (currentUrl && currentUrl !== "about:blank") {
+      const previousTitle = titleSpanRef.innerText.replace(/^📄\s*/, "");
+      navStack.push({ url: currentUrl, title: previousTitle });
+      if (navStack.length > 20) navStack.shift();
     }
 
-    iframeElement.src = url;
-    currentLoadedUrl = url;
-    titleSpan.innerHTML = `📄 ${title}`;
+    iframeRef.src = url;
+    currentUrl = url;
+    titleSpanRef.innerHTML = `📄 ${title}`;
   }
 
-  // go back in navigation history
-  function handleBack() {
-    if (navigationHistory.length === 0) {
-      // reset to empty state
-      if (currentLoadedUrl && currentLoadedUrl !== "about:blank") {
-        titleSpan.innerHTML = `📄 Select a monitoring module`;
-        iframeElement.src = "about:blank";
-        currentLoadedUrl = "";
+  // back navigation: restore previous module
+  function goBack() {
+    if (!iframeRef || !titleSpanRef) return;
+    if (navStack.length === 0) {
+      // reset to empty selection
+      if (currentUrl && currentUrl !== "about:blank") {
+        iframeRef.src = "about:blank";
+        currentUrl = "";
+        titleSpanRef.innerHTML = `📄 Select a module`;
       } else {
-        if (iframeElement) iframeElement.src = "about:blank";
-        titleSpan.innerHTML = `📄 Select a monitoring module`;
-        currentLoadedUrl = "";
+        iframeRef.src = "about:blank";
+        titleSpanRef.innerHTML = `📄 Select a module`;
+        currentUrl = "";
       }
       return;
     }
-    const prev = navigationHistory.pop();
-    iframeElement.src = prev.url;
-    currentLoadedUrl = prev.url;
-    titleSpan.innerHTML = `📄 ${prev.title}`;
+    const prev = navStack.pop();
+    iframeRef.src = prev.url;
+    currentUrl = prev.url;
+    titleSpanRef.innerHTML = `📄 ${prev.title}`;
   }
 
-  // render module cards
-  function renderModules() {
-    const grid = document.getElementById("linksGrid");
-    if (!grid) return;
-    let cardsHtml = "";
+  // render responsive card grid (touch optimized)
+  function buildModuleCards() {
+    const gridContainer = document.getElementById("linksGrid");
+    if (!gridContainer) return;
+    let cardHtml = '';
     modules.forEach((mod, idx) => {
-      cardsHtml += `
-        <div class="card-module" data-module-index="${idx}">
+      cardHtml += `
+        <div class="card-module" data-mod-idx="${idx}">
           <div class="card-header-mod">
             <div class="card-icon">${mod.icon}</div>
             <h3>${mod.name}</h3>
@@ -528,122 +539,127 @@
         </div>
       `;
     });
-    grid.innerHTML = cardsHtml;
-    // attach click events
+    gridContainer.innerHTML = cardHtml;
+    // attach event listeners (delegation not needed - individual)
     document.querySelectorAll('.card-module').forEach(card => {
       card.addEventListener('click', (e) => {
-        const idxAttr = card.getAttribute('data-module-index');
-        if (idxAttr !== null && modules[idxAttr]) {
-          const target = modules[idxAttr];
-          loadModule(target.url, target.name);
+        e.stopPropagation();
+        const idxAttr = card.getAttribute('data-mod-idx');
+        if (idxAttr !== null && modules[parseInt(idxAttr)]) {
+          const target = modules[parseInt(idxAttr)];
+          loadModuleIntoIframe(target.url, target.name);
         }
       });
+      // touch / mobile feedback already via css :active
     });
   }
 
-  // logout procedure
-  function logoutAndReset() {
+  // logout: wipe session and reset ui
+  function logoutSession() {
     localStorage.removeItem("gepco_auth");
-    document.getElementById("mainDashboard").style.display = "none";
-    document.getElementById("loginOverlay").style.display = "flex";
-    if (iframeElement) {
-      iframeElement.src = "about:blank";
+    const mainDash = document.getElementById("mainDashboard");
+    const loginOverlayDiv = document.getElementById("loginOverlay");
+    if (mainDash) mainDash.style.display = "none";
+    if (loginOverlayDiv) loginOverlayDiv.style.display = "flex";
+    if (iframeRef) {
+      iframeRef.src = "about:blank";
     }
-    currentLoadedUrl = "";
-    navigationHistory = [];
-    if (titleSpan) titleSpan.innerHTML = "📄 Select a monitoring module";
+    currentUrl = "";
+    navStack = [];
+    if (titleSpanRef) titleSpanRef.innerHTML = "📄 Select a module";
     // clear login fields
-    document.getElementById("loginUser").value = "";
-    document.getElementById("loginPass").value = "";
+    const userField = document.getElementById("loginUser");
+    const passField = document.getElementById("loginPass");
+    if (userField) userField.value = "";
+    if (passField) passField.value = "";
+    const errorSpan = document.getElementById("loginError");
+    if (errorSpan) errorSpan.innerText = "";
   }
 
   // authenticate and show dashboard
-  function attemptLogin() {
+  function authenticateAndShow() {
     const username = document.getElementById("loginUser").value.trim();
     const password = document.getElementById("loginPass").value.trim();
-    const errorDiv = document.getElementById("loginError");
+    const errorSpan = document.getElementById("loginError");
     if (username === VALID_USER && password === VALID_PASS) {
       localStorage.setItem("gepco_auth", "true");
-      showDashboard();
+      showDashboardUI();
     } else {
-      errorDiv.innerText = "Access denied · Invalid credentials";
-      setTimeout(() => {
-        if (errorDiv) errorDiv.innerText = "";
-      }, 2000);
+      if (errorSpan) errorSpan.innerText = "❌ Access denied · Invalid credentials";
+      setTimeout(() => { if (errorSpan) errorSpan.innerText = ""; }, 2000);
     }
   }
 
-  function showDashboard() {
-    const loginOverlay = document.getElementById("loginOverlay");
-    const mainDash = document.getElementById("mainDashboard");
-    if (loginOverlay) loginOverlay.style.display = "none";
-    if (mainDash) mainDash.style.display = "block";
-
-    iframeElement = document.getElementById("sheetFrame");
-    titleSpan = document.getElementById("currentSheetTitle");
-
-    // reset state
-    if (iframeElement) iframeElement.src = "about:blank";
-    currentLoadedUrl = "";
-    navigationHistory = [];
-    if (titleSpan) titleSpan.innerHTML = "📄 Select a monitoring module";
-
-    // optional: right-click restriction for extra security (prevents opening frame in new tab easily)
-    if (iframeElement) {
-      iframeElement.addEventListener("contextmenu", (e) => {
+  function showDashboardUI() {
+    const loginDiv = document.getElementById("loginOverlay");
+    const mainDiv = document.getElementById("mainDashboard");
+    if (loginDiv) loginDiv.style.display = "none";
+    if (mainDiv) mainDiv.style.display = "block";
+    
+    iframeRef = document.getElementById("sheetFrame");
+    titleSpanRef = document.getElementById("currentSheetTitle");
+    
+    // reset visual state
+    if (iframeRef) {
+      iframeRef.src = "about:blank";
+      // optional: disable right-click on iframe for security (no popup new tab)
+      iframeRef.addEventListener("contextmenu", (e) => {
         e.preventDefault();
         return false;
       });
     }
-    renderModules(); // ensure fresh cards are rendered
+    currentUrl = "";
+    navStack = [];
+    if (titleSpanRef) titleSpanRef.innerHTML = "📄 Select a module";
+    
+    // render cards again (ensures fresh mapping)
+    buildModuleCards();
   }
 
-  // check authentication on load
-  function checkAuthentication() {
-    const authFlag = localStorage.getItem("gepco_auth");
-    if (authFlag === "true") {
-      showDashboard();
+  // check auth on load & after
+  function checkExistingAuth() {
+    const isAuth = localStorage.getItem("gepco_auth");
+    if (isAuth === "true") {
+      showDashboardUI();
     } else {
-      document.getElementById("loginOverlay").style.display = "flex";
-      document.getElementById("mainDashboard").style.display = "none";
+      const loginOver = document.getElementById("loginOverlay");
+      const mainDash = document.getElementById("mainDashboard");
+      if (loginOver) loginOver.style.display = "flex";
+      if (mainDash) mainDash.style.display = "none";
     }
   }
 
-  function bindEventListeners() {
+  function attachGlobalEvents() {
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutButton");
-    const backBtn = document.getElementById("backButton");
-
-    if (loginBtn) loginBtn.addEventListener("click", attemptLogin);
-    if (logoutBtn) logoutBtn.addEventListener("click", logoutAndReset);
-    if (backBtn) backBtn.addEventListener("click", handleBack);
-
-    // allow enter key on login fields
-    const userField = document.getElementById("loginUser");
-    const passField = document.getElementById("loginPass");
-    const onEnter = (e) => { if (e.key === "Enter") attemptLogin(); };
-    if (userField) userField.addEventListener("keypress", onEnter);
-    if (passField) passField.addEventListener("keypress", onEnter);
+    const backNavBtn = document.getElementById("backButton");
+    
+    if (loginBtn) loginBtn.addEventListener("click", authenticateAndShow);
+    if (logoutBtn) logoutBtn.addEventListener("click", logoutSession);
+    if (backNavBtn) backNavBtn.addEventListener("click", goBack);
+    
+    // enter to login
+    const userNameInput = document.getElementById("loginUser");
+    const passwordInput = document.getElementById("loginPass");
+    const handleEnter = (e) => { if (e.key === "Enter") authenticateAndShow(); };
+    if (userNameInput) userNameInput.addEventListener("keypress", handleEnter);
+    if (passwordInput) passwordInput.addEventListener("keypress", handleEnter);
   }
-
-  // initial setup
+  
+  // initialize application
   document.addEventListener("DOMContentLoaded", () => {
-    bindEventListeners();
-    checkAuthentication();
-    // ensure iframe references after dynamic show
-    const iframeWatcher = setInterval(() => {
-      if (document.getElementById("sheetFrame")) {
-        iframeElement = document.getElementById("sheetFrame");
-        titleSpan = document.getElementById("currentSheetTitle");
-        if (iframeElement && titleSpan && document.getElementById("mainDashboard").style.display === "block") {
-          if (!currentLoadedUrl) {
-            iframeElement.src = "about:blank";
-            titleSpan.innerHTML = "📄 Select a monitoring module";
-          }
-        }
-        clearInterval(iframeWatcher);
+    attachGlobalEvents();
+    checkExistingAuth();
+    // Extra resize/safe iframe height for mobile browsers (already handled by CSS)
+    window.addEventListener('resize', () => {
+      if (iframeRef) {
+        // force reflow: tiny tweak for some mobile browsers — no heavy logic
+        iframeRef.style.height = 'auto';
+        setTimeout(() => {
+          if (iframeRef) iframeRef.style.height = '';
+        }, 50);
       }
-    }, 200);
+    });
   });
 </script>
 </body>
