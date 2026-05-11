@@ -312,6 +312,27 @@
       display: flex;
       justify-content: center;
       gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Style for the new tab link */
+    .new-tab-link {
+      color: #1f6e48;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .new-tab-link:hover {
+      color: #115c3c;
+      text-decoration: underline;
+    }
+
+    .new-tab-link:active {
+      transform: scale(0.98);
     }
 
     /* improved tap targets */
@@ -391,6 +412,7 @@
 
     <div class="footer-note">
       <span>© GEPCO Infrastructure</span>
+      <a href="#" id="openNewTabLink" class="new-tab-link" target="_blank">🔗 Open LS Site Report in New Tab</a>
       <span>🔐 secure viewer</span>
     </div>
   </div>
@@ -403,6 +425,9 @@
   const VALID_USER = "admin";
   const VALID_PASS = "gepco2025";
 
+  // LS Report URL (for the new tab link)
+  const LS_REPORT_URL = "https://script.google.com/macros/s/AKfycbwDTf9jaLe17B0P9TS3lTBrzymJGG09m0Gt2aQDHz5ud9bBYpJi2-hETr0t_v1lSGy6Eg/exec";
+
   // ------------------------------------------------------------------
   // COMPLETE MODULE DATA (including the Apps Script LS Site Report 
   // which now uses .setXFrameOptionsMode(ALLOWALL) for smooth embedding)
@@ -412,7 +437,7 @@
       name: "LS Site Report",
       icon: "📋",
       desc: "Pre-commencement safety & line survey · compliance",
-      url: "https://script.google.com/macros/s/AKfycbwDTf9jaLe17B0P9TS3lTBrzymJGG09m0Gt2aQDHz5ud9bBYpJi2-hETr0t_v1lSGy6Eg/exec"
+      url: LS_REPORT_URL
     },
     {
       name: "Live LT/HT Works",
@@ -517,6 +542,14 @@
     iframeElement.src = previous.url;
     currentLoadedUrl = previous.url;
     titleSpan.innerHTML = `📄 ${previous.title}`;
+  }
+
+  // --------------------------------------------------------------
+  // Open LS Report in new tab (function for the footer link)
+  // --------------------------------------------------------------
+  function openInNewTab(event) {
+    event.preventDefault();
+    window.open(lsReport.html, '_blank', 'noopener,noreferrer');
   }
 
   // --------------------------------------------------------------
@@ -628,10 +661,12 @@
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutButton");
     const backBtn = document.getElementById("backButton");
+    const newTabLink = document.getElementById("openNewTabLink");
 
     if (loginBtn) loginBtn.addEventListener("click", attemptLogin);
     if (logoutBtn) logoutBtn.addEventListener("click", logoutAndReset);
     if (backBtn) backBtn.addEventListener("click", goBack);
+    if (newTabLink) newTabLink.addEventListener("click", openInNewTab);
 
     const userInput = document.getElementById("loginUser");
     const passInput = document.getElementById("loginPass");
