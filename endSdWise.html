@@ -1,22 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eengineer.akram@gmail.com</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-        iframe { width: 100%; height: 600px; border: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Sub Division wise line activities reported and endorsed by SDO — GEPCO Safety Directorate.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0b5c3b">
+  <title>Sub Division Wise Line Activities — GEPCO Safety Directorate</title>
+
+  <style>
+    :root {
+      --brand:  #0b5c3b;
+      --bg:     #f2f5f3;
+      --surface:#ffffff;
+      --text:   #10201a;
+      --muted:  #5c6b64;
+      --line:   rgba(0, 0, 0, .10);
+      --shadow: 0 8px 30px rgba(0, 0, 0, .08);
+      --radius: 16px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:     #0d1411;
+        --surface:#151d1a;
+        --text:   #e7efeb;
+        --muted:  #9aada4;
+        --line:   rgba(255, 255, 255, .12);
+        --shadow: 0 8px 30px rgba(0, 0, 0, .5);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ---------- Header ---------- */
+    .site-header {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem 1rem;
+      flex-wrap: wrap;
+      padding: .85rem clamp(1rem, 4vw, 2rem);
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .site-header h1 {
+      margin: 0;
+      max-width: 70ch;
+      font-size: clamp(.95rem, .85rem + 1vw, 1.3rem);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -.01em;
+      color: var(--brand);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .site-header h1 { color: #6fd3a6; }
+    }
+
+    .open-link {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--brand);
+      text-decoration: none;
+      padding: .45rem .85rem;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: background-color .15s ease, color .15s ease;
+    }
+    @media (prefers-color-scheme: dark) { .open-link { color: #6fd3a6; } }
+    .open-link:hover,
+    .open-link:focus-visible { background: var(--brand); color: #fff; }
+
+    /* ---------- Frame area ---------- */
+    main {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      padding: clamp(.5rem, 2vw, 1.25rem);
+    }
+
+    .frame-wrap {
+      position: relative;
+      flex: 1 1 auto;
+      display: flex;
+      min-height: 65dvh;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .frame-wrap iframe {
+      flex: 1 1 auto;
+      width: 100%;
+      border: 0;
+      display: block;
+      background: var(--surface);
+    }
+
+    /* ---------- Loading overlay ---------- */
+    .loader {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .85rem;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: .9rem;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+
+    .loader.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 34px;
+      height: 34px;
+      border: 3px solid var(--line);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner { animation-duration: 2s; }
+      .loader { transition: none; }
+    }
+
+    /* ---------- Fallback note ---------- */
+    .fallback {
+      flex: 0 0 auto;
+      margin: 0 clamp(1rem, 4vw, 2rem) 1rem;
+      padding: .7rem 1rem;
+      font-size: .85rem;
+      text-align: center;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+    }
+    .fallback a { color: var(--brand); font-weight: 600; }
+    @media (prefers-color-scheme: dark) { .fallback a { color: #6fd3a6; } }
+    .fallback[hidden] { display: none; }
+
+    /* ---------- Print: wide table prefers landscape ---------- */
+    @page { size: A4 landscape; margin: 10mm; }
+
+    @media print {
+      body { background: #fff; }
+      .site-header, .loader, .fallback { display: none !important; }
+      main { padding: 0; }
+      .frame-wrap {
+        box-shadow: none;
+        border: 0;
+        border-radius: 0;
+        min-height: auto;
+      }
+      .frame-wrap iframe { height: 90vh; }
+    }
+  </style>
 </head>
+
 <body>
-    <h2>Sub Division Wise Line Activities Reported & Endorsed By SDO</h2>
-     <iframe
+  <header class="site-header">
+    <h1>Sub Division Wise Line Activities Reported &amp; Endorsed By SDO</h1>
+    <a class="open-link"
+       href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=294282149&single=true"
+       target="_blank"
+       rel="noopener noreferrer">
+      Open in new tab ↗
+    </a>
+  </header>
+
+  <main>
+    <div class="frame-wrap">
+      <div class="loader" id="loader" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="loader-text">Loading report…</span>
+      </div>
+
+      <iframe
+        id="form-frame"
         src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=294282149&single=true"
+        title="Sub Division wise line activities reported and endorsed by SDO — published spreadsheet report"
         allow="geolocation; camera; microphone; clipboard-write; fullscreen"
         allowfullscreen
         referrerpolicy="no-referrer-when-downgrade"
-        loading="lazy">
-    </iframe>
+        loading="eager">
+      </iframe>
+    </div>
+  </main>
+
+  <p class="fallback" id="fallback" hidden>
+    The report is taking longer than usual to load.
+    <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=294282149&single=true"
+       target="_blank" rel="noopener noreferrer">Open it in a new tab</a> instead.
+  </p>
+
+  <noscript>
+    <p class="fallback">
+      JavaScript is disabled, so the embedded report may not display properly.
+      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=294282149&single=true">
+        Open the report directly
+      </a>.
+    </p>
+  </noscript>
+
+  <script>
+    (function () {
+      var frame    = document.getElementById('form-frame');
+      var loader   = document.getElementById('loader');
+      var text     = document.getElementById('loader-text');
+      var fallback = document.getElementById('fallback');
+      var slowTimer;
+
+      function hideLoader() {
+        clearTimeout(slowTimer);
+        loader.classList.add('is-hidden');
+      }
+
+      frame.addEventListener('load', hideLoader);
+
+      // If the sheet hasn't finished after 10s, show a direct link.
+      slowTimer = setTimeout(function () {
+        text.textContent = 'Still loading…';
+        fallback.hidden = false;
+      }, 10000);
+    })();
+  </script>
 </body>
 </html>
