@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Sub Division wise line activities reported — GEPCO Safety Directorate.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0b5c3b">
+  <title>gepco</title>
+
+  <style>
+    :root {
+      --brand:  #0b5c3b;
+      --bg:     #f2f5f3;
+      --surface:#ffffff;
+      --text:   #10201a;
+      --muted:  #5c6b64;
+      --line:   rgba(0, 0, 0, .10);
+      --shadow: 0 8px 30px rgba(0, 0, 0, .08);
+      --radius: 16px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:     #0d1411;
+        --surface:#151d1a;
+        --text:   #e7efeb;
+        --muted:  #9aada4;
+        --line:   rgba(255, 255, 255, .12);
+        --shadow: 0 8px 30px rgba(0, 0, 0, .5);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ---------- Header ---------- */
+    .site-header {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem 1rem;
+      flex-wrap: wrap;
+      padding: .85rem clamp(1rem, 4vw, 2rem);
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .site-header h1 {
+      margin: 0;
+      max-width: 70ch;
+      font-size: clamp(.95rem, .85rem + 1vw, 1.3rem);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -.01em;
+      color: var(--brand);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .site-header h1 { color: #6fd3a6; }
+    }
+
+    /* ---------- Header actions ---------- */
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .875rem;
+      font-weight: 600;
+      font-family: inherit;
+      line-height: 1;
+      color: var(--brand);
+      text-decoration: none;
+      padding: .5rem .85rem;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      background: transparent;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background-color .15s ease, color .15s ease;
+    }
+    @media (prefers-color-scheme: dark) { .btn { color: #6fd3a6; } }
+    .btn:hover,
+    .btn:focus-visible { background: var(--brand); color: #fff; }
+
+    /* Download dropdown */
+    .dl { position: relative; }
+
+    .dl > summary {
+      list-style: none;
+      cursor: pointer;
+    }
+    .dl > summary::-webkit-details-marker { display: none; }
+    .dl > summary::after {
+      content: "▾";
+      font-size: .7em;
+      line-height: 1;
+      transition: transform .15s ease;
+    }
+    .dl[open] > summary::after { transform: rotate(180deg); }
+
+    .dl-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + .45rem);
+      z-index: 30;
+      min-width: 170px;
+      display: flex;
+      flex-direction: column;
+      padding: .35rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .dl-menu a {
+      display: block;
+      padding: .55rem .7rem;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .dl-menu a:hover,
+    .dl-menu a:focus-visible {
+      background: var(--bg);
+      color: var(--brand);
+      outline: none;
+    }
+    @media (prefers-color-scheme: dark) {
+      .dl-menu a:hover,
+      .dl-menu a:focus-visible { color: #6fd3a6; }
+    }
+
+    /* ---------- Frame area ---------- */
+    main {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      padding: clamp(.5rem, 2vw, 1.25rem);
+    }
+
+    .frame-wrap {
+      position: relative;
+      flex: 1 1 auto;
+      display: flex;
+      min-height: 65dvh;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .frame-wrap iframe {
+      flex: 1 1 auto;
+      width: 100%;
+      border: 0;
+      display: block;
+      background: var(--surface);
+    }
+
+    /* ---------- Loading overlay ---------- */
+    .loader {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .85rem;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: .9rem;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+
+    .loader.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 34px;
+      height: 34px;
+      border: 3px solid var(--line);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner { animation-duration: 2s; }
+      .loader { transition: none; }
+    }
+
+    /* ---------- Fallback note ---------- */
+    .fallback {
+      flex: 0 0 auto;
+      margin: 0 clamp(1rem, 4vw, 2rem) 1rem;
+      padding: .7rem 1rem;
+      font-size: .85rem;
+      text-align: center;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+    }
+    .fallback a { color: var(--brand); font-weight: 600; }
+    @media (prefers-color-scheme: dark) { .fallback a { color: #6fd3a6; } }
+    .fallback[hidden] { display: none; }
+
+    /* ---------- Print: wide table prefers landscape ---------- */
+    @page { size: A4 landscape; margin: 10mm; }
+
+    @media print {
+      body { background: #fff; }
+      .site-header, .loader, .fallback { display: none !important; }
+      main { padding: 0; }
+      .frame-wrap {
+        box-shadow: none;
+        border: 0;
+        border-radius: 0;
+        min-height: auto;
+      }
+      .frame-wrap iframe { height: 90vh; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <h1>PTW Completed During Last 24 Hours</h1>
+
+    <div class="actions">
+      <a class="btn"
+         href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=1342049665&single=true"
+         target="_blank"
+         rel="noopener noreferrer">
+        Open in new tab ↗
+      </a>
+
+      <details class="dl" id="download-menu">
+        <summary class="btn" aria-haspopup="true" aria-label="Download options">Download</summary>
+        <div class="dl-menu" role="menu">
+          <a role="menuitem"
+             href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=1342049665&single=true"
+             target="_blank" rel="noopener noreferrer">
+            CSV (.csv)
+          </a>
+          <a role="menuitem"
+             href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=1342049665&single=true"
+             target="_blank" rel="noopener noreferrer">
+            TSV (.tsv)
+          </a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <main>
+    <div class="frame-wrap">
+      <div class="loader" id="loader" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="loader-text">Loading report…</span>
+      </div>
+
+      <iframe
+        id="form-frame"
+        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=1342049665&single=true"
+        title="Sub Division wise line activities reported — published spreadsheet report"
+        allow="geolocation; camera; microphone; clipboard-write; fullscreen"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        loading="eager">
+      </iframe>
+    </div>
+  </main>
+
+  <p class="fallback" id="fallback" hidden>
+    The report is taking longer than usual to load.
+    <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=1342049665&single=true"
+       target="_blank" rel="noopener noreferrer">Open it in a new tab</a> instead.
+  </p>
+
+  <noscript>
+    <p class="fallback">
+      JavaScript is disabled, so the embedded report may not display properly.
+      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=1342049665&single=true">
+        Download the report as CSV
+      </a>.
+    </p>
+  </noscript>
+
+  <script>
+    (function () {
+      var frame    = document.getElementById('form-frame');
+      var loader   = document.getElementById('loader');
+      var text     = document.getElementById('loader-text');
+      var fallback = document.getElementById('fallback');
+      var menu     = document.getElementById('download-menu');
+      var slowTimer;
+
+      function hideLoader() {
+        clearTimeout(slowTimer);
+        loader.classList.add('is-hidden');
+      }
+
+      frame.addEventListener('load', hideLoader);
+
+      // If the sheet hasn't finished after 10s, show a direct link.
+      slowTimer = setTimeout(function () {
+        text.textContent = 'Still loading…';
+        fallback.hidden = false;
+      }, 10000);
+
+      /* Close download menu on outside click or Escape */
+      document.addEventListener('click', function (e) {
+        if (menu.open && !menu.contains(e.target)) menu.open = false;
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.open) menu.open = false;
+      });
+      /* Close after picking a format */
+      menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { menu.open = false; });
+      });
+    })();
+  </script>
+</body>
+</html>
