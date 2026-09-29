@@ -73,20 +73,87 @@
       .site-header h1 { color: #6fd3a6; }
     }
 
-    .open-link {
+    /* ---------- Header actions ---------- */
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
       font-size: .875rem;
       font-weight: 600;
+      font-family: inherit;
+      line-height: 1;
       color: var(--brand);
       text-decoration: none;
-      padding: .45rem .85rem;
+      padding: .5rem .85rem;
       border: 1px solid currentColor;
       border-radius: 999px;
+      background: transparent;
       white-space: nowrap;
+      cursor: pointer;
       transition: background-color .15s ease, color .15s ease;
     }
-    @media (prefers-color-scheme: dark) { .open-link { color: #6fd3a6; } }
-    .open-link:hover,
-    .open-link:focus-visible { background: var(--brand); color: #fff; }
+    @media (prefers-color-scheme: dark) { .btn { color: #6fd3a6; } }
+    .btn:hover,
+    .btn:focus-visible { background: var(--brand); color: #fff; }
+
+    /* Download dropdown */
+    .dl { position: relative; }
+
+    .dl > summary {
+      list-style: none;
+      cursor: pointer;
+    }
+    .dl > summary::-webkit-details-marker { display: none; }
+    .dl > summary::after {
+      content: "▾";
+      font-size: .7em;
+      line-height: 1;
+      transition: transform .15s ease;
+    }
+    .dl[open] > summary::after { transform: rotate(180deg); }
+
+    .dl-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + .45rem);
+      z-index: 30;
+      min-width: 170px;
+      display: flex;
+      flex-direction: column;
+      padding: .35rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .dl-menu a {
+      display: block;
+      padding: .55rem .7rem;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .dl-menu a:hover,
+    .dl-menu a:focus-visible {
+      background: var(--bg);
+      color: var(--brand);
+      outline: none;
+    }
+    @media (prefers-color-scheme: dark) {
+      .dl-menu a:hover,
+      .dl-menu a:focus-visible { color: #6fd3a6; }
+    }
 
     /* ---------- Frame area ---------- */
     main {
@@ -191,12 +258,31 @@
 <body>
   <header class="site-header">
     <h1>Sub Division Wise Line Activities Reported</h1>
-    <a class="open-link"
-       href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=2009778366&single=true"
-       target="_blank"
-       rel="noopener noreferrer">
-      Open in new tab ↗
-    </a>
+
+    <div class="actions">
+      <a class="btn"
+         href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=2009778366&single=true"
+         target="_blank"
+         rel="noopener noreferrer">
+        Open in new tab ↗
+      </a>
+
+      <details class="dl" id="download-menu">
+        <summary class="btn" aria-haspopup="true" aria-label="Download options">Download</summary>
+        <div class="dl-menu" role="menu">
+          <a role="menuitem"
+             href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pub?gid=2009778366&single=true&output=csv"
+             target="_blank" rel="noopener noreferrer">
+            CSV (.csv)
+          </a>
+          <a role="menuitem"
+             href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pub?gid=2009778366&single=true&output=tsv"
+             target="_blank" rel="noopener noreferrer">
+            TSV (.tsv)
+          </a>
+        </div>
+      </details>
+    </div>
   </header>
 
   <main>
@@ -227,8 +313,8 @@
   <noscript>
     <p class="fallback">
       JavaScript is disabled, so the embedded report may not display properly.
-      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pubhtml?gid=2009778366&single=true">
-        Open the report directly
+      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQC8IZ7ElOuMYKCZCPnmKn5xy-ECbqrS8QiDBFsguPMftV2e4BJOlm_Y7BNEpp5esY6pKpO0-bjF3c_/pub?gid=2009778366&single=true&output=csv">
+        Download the report as CSV
       </a>.
     </p>
   </noscript>
@@ -239,6 +325,7 @@
       var loader   = document.getElementById('loader');
       var text     = document.getElementById('loader-text');
       var fallback = document.getElementById('fallback');
+      var menu     = document.getElementById('download-menu');
       var slowTimer;
 
       function hideLoader() {
@@ -253,6 +340,18 @@
         text.textContent = 'Still loading…';
         fallback.hidden = false;
       }, 10000);
+
+      /* Close download menu on outside click or Escape */
+      document.addEventListener('click', function (e) {
+        if (menu.open && !menu.contains(e.target)) menu.open = false;
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.open) menu.open = false;
+      });
+      /* Close after picking a format */
+      menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { menu.open = false; });
+      });
     })();
   </script>
 </body>
