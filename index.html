@@ -1,698 +1,686 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>GEPCO Mobile | HT/LT Works Hub</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0f1419">
+<title>GEPCO · HT/LT Works Hub</title>
+<style>
+/* ---------- THEME TOKENS ---------- */
+:root[data-theme="dark"] {
+  --bg: #0b0f14;
+  --surface: #131920;
+  --surface-2: #1a212b;
+  --surface-3: #222b36;
+  --border: #2a3540;
+  --border-hover: #3d4a58;
+  --text: #e8edf3;
+  --text-2: #8b98a8;
+  --text-3: #5f6b7a;
+  --primary: #34d17a;
+  --primary-2: #22b866;
+  --primary-soft: rgba(52, 209, 122, .10);
+  --primary-glow: rgba(52, 209, 122, .25);
+  --err: #ef4444;
+  --err-soft: rgba(239, 68, 68, .14);
+  --overlay: rgba(6, 10, 14, .94);
+  --shadow: 0 8px 32px rgba(0, 0, 0, .35);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f0f4f2;
+  --surface: #ffffff;
+  --surface-2: #f5f8f6;
+  --surface-3: #eaf0ec;
+  --border: #dce6e0;
+  --border-hover: #b8cfc0;
+  --text: #0f1a17;
+  --text-2: #4a6358;
+  --text-3: #8ba397;
+  --primary: #1a7a4e;
+  --primary-2: #0f5c38;
+  --primary-soft: rgba(26, 122, 78, .08);
+  --primary-glow: rgba(26, 122, 78, .18);
+  --err: #c2412c;
+  --err-soft: rgba(194, 65, 44, .08);
+  --overlay: rgba(10, 28, 20, .94);
+  --shadow: 0 8px 32px rgba(15, 26, 23, .08);
+  --shadow-sm: 0 2px 8px rgba(15, 26, 23, .05);
+  color-scheme: light;
+}
 
-    body {
-      background: #eef2f5;
-      font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-      min-height: 100vh;
-      color: #1a2e2a;
-    }
+/* ---------- RESET ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .3s ease, color .3s ease;
+  padding-bottom: 80px;
+}
+button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; border: none; background: none; }
+input { font: inherit; }
+a { color: var(--primary); text-decoration: none; }
 
-    /* --- LOGIN (mobile-first, centered) --- */
-    .login-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(10, 28, 20, 0.96);
-      backdrop-filter: blur(16px);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.2rem;
-    }
+/* ---------- LOGIN ---------- */
+#loginScreen {
+  position: fixed; inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.2rem;
+  z-index: 200;
+}
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 2.2rem 1.8rem;
+  width: 100%; max-width: 380px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  animation: slideUp .4s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.login-card .brand-icon { font-size: 2.4rem; margin-bottom: .4rem; }
+.login-card .brand {
+  font-size: 1.9rem; font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -.03em;
+  margin-bottom: .15rem;
+}
+.login-card .tagline { font-size: .82rem; color: var(--text-2); margin-bottom: 1.8rem; }
+.login-input {
+  width: 100%;
+  padding: .9rem 1.15rem;
+  margin-bottom: .65rem;
+  border-radius: 60px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.login-input::placeholder { color: var(--text-3); }
+.login-input:focus {
+  border-color: var(--primary);
+  background: var(--surface);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+.login-btn {
+  width: 100%;
+  padding: .95rem;
+  margin-top: .5rem;
+  border-radius: 60px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700; font-size: 1rem;
+  transition: background .2s, transform .1s, box-shadow .2s;
+  box-shadow: 0 4px 16px var(--primary-glow);
+}
+.login-btn:hover:not(:disabled) { background: var(--primary-2); }
+.login-btn:active:not(:disabled) { transform: scale(.97); }
+.login-btn:disabled { opacity: .5; cursor: not-allowed; }
+.error-msg { color: var(--err); font-size: .8rem; margin-top: .75rem; min-height: 1.1em; }
+.login-foot {
+  margin-top: 1.2rem;
+  font-size: .65rem;
+  color: var(--text-3);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 
-    .login-card {
-      background: #ffffff;
-      border-radius: 2rem;
-      padding: 2rem 1.5rem;
-      max-width: 340px;
-      width: 100%;
-      box-shadow: 0 30px 40px -15px rgba(0, 0, 0, 0.3);
-      text-align: center;
-    }
+/* ---------- DASHBOARD ---------- */
+#dashboard { display: none; min-height: 100dvh; }
+.shell { max-width: 720px; margin: 0 auto; padding: 0 14px; }
 
-    .login-card h2 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #166534, #2b8c5a);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      margin-bottom: 0.25rem;
-    }
+/* ---------- HEADER ---------- */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0 12px;
+  position: sticky; top: 0;
+  background: var(--bg);
+  z-index: 50;
+  transition: background .3s ease;
+}
+.header-title h1 {
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--text); letter-spacing: -.03em; line-height: 1.2;
+}
+.header-title p { font-size: .72rem; color: var(--text-2); margin-top: 1px; }
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 40px; height: 40px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 16px; transition: all .2s;
+}
+.icon-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.icon-btn:active { transform: scale(.92); }
+.theme-toggle { font-size: 17px; }
+.logout-btn { color: var(--err); border-color: var(--err-soft); }
+.logout-btn:hover { border-color: var(--err); background: var(--err-soft); }
 
-    .login-card p {
-      color: #4a6b5a;
-      font-size: 0.85rem;
-      margin-bottom: 1.5rem;
-    }
+/* ---------- HERO / SAFETY IMAGE ---------- */
+.hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn .5s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  background: var(--surface-2);
+}
+.hero-content { padding: 16px 18px 18px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .68rem; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border: 1px solid var(--primary);
+  border-radius: 100px;
+  padding: 3px 10px;
+  margin-bottom: 8px;
+}
+.hero-content h2 {
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--text); margin-bottom: 4px; letter-spacing: -.01em;
+}
+.hero-content p { font-size: .78rem; color: var(--text-2); line-height: 1.45; }
+.hero-credit {
+  font-size: .6rem; color: var(--text-3); margin-top: 6px;
+}
+.hero-credit a { color: var(--text-3); text-decoration: underline; }
 
-    .login-input {
-      width: 100%;
-      padding: 0.9rem 1rem;
-      margin: 0.5rem 0;
-      border-radius: 60px;
-      border: 1px solid #d0dfd4;
-      font-size: 1rem;
-      background: #fefcf7;
-      transition: all 0.2s;
-      outline: none;
-    }
+/* ---------- SEARCH ---------- */
+.search-wrap {
+  position: relative;
+  margin-bottom: 14px;
+  animation: fadeIn .5s ease .05s both;
+}
+.search-icon {
+  position: absolute; left: 16px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px; color: var(--text-3);
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  padding: 13px 16px 13px 44px;
+  border-radius: 16px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: .95rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.search-input::placeholder { color: var(--text-3); }
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
 
-    .login-input:focus {
-      border-color: #2b8c5a;
-      box-shadow: 0 0 0 3px rgba(43, 140, 90, 0.2);
-    }
+/* ---------- OPTIONS (BENTO GRID) ---------- */
+.section-label {
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-3); margin: 4px 2px 10px;
+}
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+@media (min-width: 640px) {
+  .options-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.option-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 16px 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  text-decoration: none; color: var(--text);
+  transition: all .2s ease;
+  position: relative; overflow: hidden;
+  min-height: 120px;
+  animation: fadeIn .4s ease both;
+}
+.option-card:nth-child(1)  { animation-delay: .05s; }
+.option-card:nth-child(2)  { animation-delay: .08s; }
+.option-card:nth-child(3)  { animation-delay: .11s; }
+.option-card:nth-child(4)  { animation-delay: .14s; }
+.option-card:nth-child(5)  { animation-delay: .17s; }
+.option-card:nth-child(6)  { animation-delay: .20s; }
+.option-card:nth-child(7)  { animation-delay: .23s; }
+.option-card:nth-child(8)  { animation-delay: .26s; }
+.option-card:nth-child(9)  { animation-delay: .29s; }
+.option-card:nth-child(10) { animation-delay: .32s; }
+.option-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 20px var(--primary-glow);
+  transform: translateY(-2px);
+}
+.option-card:active { transform: scale(.97); }
+.option-card::after {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 60px; height: 60px;
+  background: radial-gradient(circle, var(--primary-soft), transparent 70%);
+  border-radius: 0 0 0 60px;
+  opacity: 0; transition: opacity .3s;
+}
+.option-card:hover::after { opacity: 1; }
+.option-emoji {
+  font-size: 1.6rem;
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.option-text {
+  font-size: .88rem; font-weight: 600;
+  color: var(--text); line-height: 1.3; flex: 1;
+}
+.option-arrow {
+  position: absolute; bottom: 12px; right: 14px;
+  font-size: .85rem; color: var(--text-3);
+  transition: transform .2s, color .2s;
+}
+.option-card:hover .option-arrow { color: var(--primary); transform: translate(2px, -2px); }
 
-    .login-btn {
-      background: #1f6e48;
-      color: white;
-      border: none;
-      width: 100%;
-      padding: 0.85rem;
-      border-radius: 60px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 1rem;
-      transition: all 0.2s;
-    }
+/* ---------- BOTTOM NAV ---------- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px));
+  z-index: 100;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, .15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: background .3s ease, border-color .3s ease;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 16px;
+  border-radius: 14px;
+  color: var(--text-3);
+  font-size: .62rem; font-weight: 600; letter-spacing: .02em;
+  transition: all .2s;
+  text-decoration: none; border: none; background: none;
+  cursor: pointer; min-width: 64px;
+}
+.nav-item.active { color: var(--primary); background: var(--primary-soft); }
+.nav-item:active { transform: scale(.92); }
+.nav-icon { font-size: 1.25rem; line-height: 1; }
+.nav-label { font-size: .62rem; }
 
-    .login-btn:active { transform: scale(0.97); background: #115c3c; }
-    .error-msg { color: #c2412c; font-size: 0.7rem; margin-top: 0.7rem; }
+/* ---------- FOOTER ---------- */
+.footer {
+  text-align: center;
+  font-size: .7rem;
+  color: var(--text-3);
+  padding: 20px 0 16px;
+}
 
-    /* --- MAIN DASHBOARD (mobile-first UI) --- */
-    .dashboard-wrapper {
-      display: none;
-      background: #f4f9f4;
-      min-height: 100vh;
-      padding: 12px;
-    }
+/* ---------- TOAST ---------- */
+.toast {
+  position: fixed;
+  bottom: 100px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 10px 20px;
+  font-size: .82rem; font-weight: 600;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  opacity: 0; pointer-events: none;
+  transition: all .3s ease;
+  z-index: 300;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .dashboard-container {
-      max-width: 100%;
-      background: #ffffff;
-      border-radius: 32px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-      overflow: hidden;
-      padding: 1rem;
-    }
-
-    /* header simplified for mobile */
-    .mobile-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 1rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid #e3efdf;
-    }
-
-    .title-badge h1 {
-      font-size: 1.45rem;
-      font-weight: 700;
-      background: linear-gradient(145deg, #1c543c, #258a58);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      line-height: 1.2;
-    }
-
-    .title-badge p {
-      font-size: 0.65rem;
-      color: #5a7b68;
-      font-weight: 500;
-    }
-
-    .stats-chip {
-      background: #eef3ea;
-      padding: 0.3rem 0.9rem;
-      border-radius: 50px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: #226e48;
-    }
-
-    /* action bar: back + logout (touch friendly) */
-    .action-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 1.2rem;
-    }
-
-    .icon-btn {
-      background: #f1f6ef;
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 40px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #1f543b;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .icon-btn:active {
-      background: #e2ecd9;
-      transform: scale(0.96);
-    }
-
-    .exit-btn {
-      background: #e9ece8;
-      color: #3a5e4b;
-    }
-    .exit-btn:active { background: #d4dfce; }
-
-    /* enhanced iframe panel - smooth corners */
-    .viewer-panel {
-      background: #fefefe;
-      border-radius: 28px;
-      overflow: hidden;
-      border: 1px solid #ddece2;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    }
-
-    .viewer-header {
-      background: #fafefa;
-      padding: 0.8rem 1rem;
-      border-bottom: 1px solid #e3efdf;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .sheet-title {
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: #1c543c;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .secure-tag {
-      background: #e9f3e9;
-      font-size: 0.6rem;
-      padding: 0.2rem 0.7rem;
-      border-radius: 40px;
-      color: #2b7a52;
-      font-weight: 600;
-    }
-
-    .sheet-iframe {
-      width: 100%;
-      height: 58vh;
-      min-height: 420px;
-      border: none;
-      background: white;
-    }
-
-    /* mobile iframe height adjust */
-    @media (max-width: 640px) {
-      .sheet-iframe {
-        height: 62vh;
-        min-height: 440px;
-      }
-    }
-
-    /* MODULES LIST - redesigned for easier thumb reach */
-    .modules-section-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #376e51;
-      margin: 1rem 0 0.8rem 0.4rem;
-      letter-spacing: -0.2px;
-    }
-
-    .modules-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin: 0.5rem 0 1rem 0;
-    }
-
-    .module-item {
-      background: #ffffff;
-      border: 1px solid #e2ecd9;
-      border-radius: 28px;
-      padding: 0.9rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-    }
-
-    .module-item:active {
-      background: #f6fdf4;
-      transform: scale(0.99);
-      border-color: #b3d3bd;
-    }
-
-    .module-emoji {
-      font-size: 2rem;
-      background: #f3f9f0;
-      width: 52px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 30px;
-    }
-
-    .module-info {
-      flex: 1;
-    }
-
-    .module-info h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #1b3a2c;
-      margin-bottom: 4px;
-    }
-
-    .module-info p {
-      font-size: 0.7rem;
-      color: #5f7c6b;
-      line-height: 1.3;
-    }
-
-    .footer-note {
-      margin-top: 1.2rem;
-      text-align: center;
-      font-size: 0.6rem;
-      color: #87a396;
-      padding-top: 0.7rem;
-      border-top: 1px solid #e2ecd9;
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    /* Style for the new tab link */
-    .new-tab-link {
-      color: #1f6e48;
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.2s;
-    }
-
-    .new-tab-link:hover {
-      color: #115c3c;
-      text-decoration: underline;
-    }
-
-    .new-tab-link:active {
-      transform: scale(0.98);
-    }
-
-    /* improved tap targets */
-    button, .module-item {
-      touch-action: manipulation;
-    }
-
-    @media (max-width: 450px) {
-      .dashboard-container {
-        padding: 0.8rem;
-      }
-      .title-badge h1 {
-        font-size: 1.25rem;
-      }
-      .icon-btn {
-        padding: 0.5rem 0.9rem;
-        font-size: 0.75rem;
-      }
-      .module-emoji {
-        width: 46px;
-        height: 46px;
-        font-size: 1.7rem;
-      }
-      .module-info h3 {
-        font-size: 0.9rem;
-      }
-    }
-  </style>
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 380px) {
+  .options-grid { grid-template-columns: 1fr; }
+  .option-card { min-height: auto; flex-direction: row; align-items: center; padding: 14px; }
+  .option-arrow { position: static; margin-left: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN (touch-optimized) -->
-<div id="loginOverlay" class="login-overlay">
-  <div class="login-card">
-    <h2>⚡ GEPCO</h2>
-    <p>HT/LT Works · Field Command</p>
-    <input type="text" id="loginUser" class="login-input" placeholder="Username" autocomplete="off" inputmode="text">
-    <input type="password" id="loginPass" class="login-input" placeholder="Password" autocomplete="off">
-    <button id="loginBtn" class="login-btn">Access Dashboard →</button>
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <div class="brand-icon">⚡</div>
+    <div class="brand">GEPCO</div>
+    <div class="tagline">HT/LT Works · Field Command</div>
+    <input type="text" id="loginUser" class="login-input"
+           placeholder="Username" autocomplete="username" required>
+    <input type="password" id="loginPass" class="login-input"
+           placeholder="Password" autocomplete="current-password" required>
+    <button type="submit" id="loginBtn" class="login-btn">Sign In →</button>
     <div id="loginError" class="error-msg"></div>
-    <div style="margin-top: 0.8rem; font-size: 0.6rem; color: #86a392;">authorized personnel only</div>
-  </div>
+    <div class="login-foot">Authorized personnel only</div>
+  </form>
 </div>
 
-<!-- MAIN DASHBOARD - MOBILE FRIENDLY STRUCTURE -->
-<div id="mainDashboard" class="dashboard-wrapper">
-  <div class="dashboard-container">
-    <!-- compact header -->
-    <div class="mobile-header">
-      <div class="title-badge">
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard">
+  <div class="shell">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-title">
         <h1>🔌 HT/LT Works</h1>
-        <p>GEPCO · real‑time monitoring</p>
+        <p>GEPCO · Real-time monitoring</p>
       </div>
-      <div class="stats-chip">📋 10 modules</div>
-    </div>
-
-    <!-- dual action row (back & logout) -->
-    <div class="action-row">
-      <button id="backButton" class="icon-btn" aria-label="Go back">← Back</button>
-      <button id="logoutButton" class="icon-btn exit-btn" aria-label="Exit dashboard">🚪 Exit</button>
-    </div>
-
-    <!-- iframe viewer panel: embedded reports & LS Site -->
-    <div class="viewer-panel">
-      <div class="viewer-header">
-        <div class="sheet-title">
-          <span>📄</span> <span id="currentSheetTitle">Select a module</span>
-        </div>
-        <div class="secure-tag">🔒 embedded</div>
+      <div class="header-actions">
+        <button type="button" class="icon-btn theme-toggle" id="themeToggle"
+                title="Toggle theme" aria-label="Toggle theme">🌙</button>
+        <button type="button" class="icon-btn logout-btn" id="logoutBtn"
+                title="Logout" aria-label="Logout">⏻</button>
       </div>
-      <iframe id="sheetFrame" class="sheet-iframe" src="about:blank" title="GEPCO Works Viewer" sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"></iframe>
+    </header>
+
+    <!-- Hero / Safety Image (Downer Group — electrical distribution) -->
+    <section class="hero">
+      <img class="hero-image"
+           src="https://downergroup.com/wp-content/uploads/sites/4/2025/10/Electrical-Distribution-Hero-Banner-2-1-1.jpg"
+           alt="Electrical distribution infrastructure — transmission towers and power lines"
+           loading="lazy">
+      <div class="hero-content">
+        <span class="hero-badge">🛡️ Safety First</span>
+        <h2>Field Safety Guide</h2>
+        <p>Maintain safe clearance from live conductors. Use proper PPE, verify isolation, and never approach high-voltage equipment without authorization.</p>
+        <p class="hero-credit">Image: <a href="https://downergroup.com/what-we-do/energy/electrical-distribution/" target="_blank" rel="noopener">Downer Group — Electrical Distribution</a></p>
+      </div>
+    </section>
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput"
+             placeholder="Search modules…" autocomplete="off">
     </div>
 
-    <!-- module picker (redesigned as vertical list for mobile thumb ease) -->
-    <div class="modules-section-title">📌 Monitoring modules</div>
-    <div class="modules-list" id="modulesListContainer"></div>
+    <!-- Options -->
+    <div class="section-label">📌 Monitoring Modules</div>
+    <div class="options-grid" id="optionsList"></div>
 
-    <div class="footer-note">
-      <span>© GEPCO Infrastructure</span>
-      <a href="#" id="openNewTabLink" class="new-tab-link" target="_blank">🔗 Open LS Site Report in New Tab</a>
-      <span>🔐 secure viewer</span>
-    </div>
+    <footer class="footer">© GEPCO Infrastructure · v2.2</footer>
+
   </div>
 </div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="bottom-nav" id="bottomNav" style="display:none">
+  <button class="nav-item active" data-nav="home" title="Home">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" data-nav="safety" title="Safety">
+    <span class="nav-icon">🛡️</span>
+    <span class="nav-label">Safety</span>
+  </button>
+  <button class="nav-item" data-nav="search" title="Search">
+    <span class="nav-icon">🔍</span>
+    <span class="nav-label">Search</span>
+  </button>
+  <button class="nav-item" data-nav="profile" title="Profile">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">Profile</span>
+  </button>
+</nav>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
 
 <script>
-  // ------------------------------------------------------------------
-  // CREDENTIALS (simple admin access)
-  // ------------------------------------------------------------------
-  const VALID_USER = akram;
-  const VALID_PASS = akram;
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const VALID_USER = USER;
+const VALID_PASS = PWORD;
+const STORAGE_KEY = 'gepco_auth';
+const THEME_KEY   = 'gepco_theme';
 
-  // LS Report URL (for the new tab link)
-  const LS_REPORT_URL = "https://script.google.com/macros/s/AKfycbwDTf9jaLe17B0P9TS3lTBrzymJGG09m0Gt2aQDHz5ud9bBYpJi2-hETr0t_v1lSGy6Eg/exec";
+const OPTIONS = [
+  { name: 'LS Site Report',              icon: '📋', url: 'https://script.google.com/macros/s/AKfycbwDTf9jaLe17B0P9TS3lTBrzymJGG09m0Gt2aQDHz5ud9bBYpJi2-hETr0t_v1lSGy6Eg/exec' },
+  { name: 'Live LT/HT Works',            icon: '⚡', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=2011569225&single=true' },
+  { name: 'Completed Works',             icon: '✅', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=1624422104&single=true' },
+  { name: 'Sub Division Wise Works',     icon: '🗺️', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=270755340&single=true' },
+  { name: 'HT Line Breakdowns',          icon: '⚠️', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=0&single=true' },
+  { name: 'LT Consumer Requests',        icon: '🏠', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml' },
+  { name: 'Feeder wise Load Mgmt',       icon: '📊', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml' },
+  { name: 'Transformer Health',          icon: '🔧', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml' },
+  { name: 'Material / Inventory Tracker',icon: '📦', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml' },
+  { name: 'Daily Progress Report',       icon: '📈', url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml' }
+];
 
-  // ------------------------------------------------------------------
-  // COMPLETE MODULE DATA (including the Apps Script LS Site Report 
-  // which now uses .setXFrameOptionsMode(ALLOWALL) for smooth embedding)
-  // ------------------------------------------------------------------
-  const modulesDataset = [
-    {
-      name: "LS Site Report",
-      icon: "📋",
-      desc: "Pre-commencement safety & line survey · compliance",
-      url: LS_REPORT_URL
-    },
-    {
-      name: "Live LT/HT Works",
-      icon: "⚡",
-      desc: "Active sites · stringing, pole erection, transformer",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=2011569225&single=true"
-    },
-    {
-      name: "Completed Works",
-      icon: "✅",
-      desc: "Final commissioning & closure certifications",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=1624422104&single=true"
-    },
-    {
-      name: "Sub Division Wise Works",
-      icon: "🗺️",
-      desc: "City, Rural, Industrial subdivision filters",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=270755340&single=true"
-    },
-    {
-      name: "HT Line Breakdowns",
-      icon: "⚠️",
-      desc: "Fault alerts, restoration, feeder downtime",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml?gid=0&single=true"
-    },
-    {
-      name: "LT Consumer Requests",
-      icon: "🏠",
-      desc: "New connections, service lines, meters",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
-    },
-    {
-      name: "Feeder wise Load Mgmt",
-      icon: "📊",
-      desc: "Peak load analytics & overloading alerts",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
-    },
-    {
-      name: "Transformer Health",
-      icon: "🔧",
-      desc: "Oil levels, thermal, maintenance schedule",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
-    },
-    {
-      name: "Material / Inventory Tracker",
-      icon: "📦",
-      desc: "Cable, poles, conductor stock status",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
-    },
-    {
-      name: "Daily Progress Report",
-      icon: "📈",
-      desc: "HT/LT achievements, contractor performance",
-      url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwSDDDu_s17e4fBcY8x1kep8pCG-r2L2rYkwFvYJQlzyNc__--nOHGWExfNzlKNbwcVRJHkuLCBlUP/pubhtml"
-    }
-  ];
+/* ============================================================
+   ELEMENTS
+   ============================================================ */
+const $ = id => document.getElementById(id);
 
-  // DOM elements
-  let iframeElement = null;
-  let titleSpan = null;
-  let currentLoadedUrl = "";
-  let historyStack = [];   // { url, title }
+const loginScreen = $('loginScreen');
+const dashboard   = $('dashboard');
+const loginForm   = $('loginForm');
+const loginUser   = $('loginUser');
+const loginPass   = $('loginPass');
+const loginBtn    = $('loginBtn');
+const loginError  = $('loginError');
+const logoutBtn   = $('logoutBtn');
+const themeToggle = $('themeToggle');
+const optionsList = $('optionsList');
+const searchInput = $('searchInput');
+const bottomNav   = $('bottomNav');
+const toast       = $('toast');
 
-  // --------------------------------------------------------------
-  // Load module: update iframe and manage back history (mobile friendly)
-  // --------------------------------------------------------------
-  function loadModule(url, title) {
-    if (!iframeElement || !titleSpan) return;
-    if (currentLoadedUrl === url) return;
+/* ============================================================
+   THEME
+   ============================================================ */
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', theme === 'dark' ? '#0b0f14' : '#f0f4f2');
+}
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+  showToast(next === 'dark' ? '🌙 Dark mode' : '☀️ Light mode');
+}
 
-    // save previous state (if any)
-    if (currentLoadedUrl && currentLoadedUrl !== "about:blank") {
-      const prevTitle = titleSpan.innerText.replace(/^📄\s*/, "");
-      historyStack.push({ url: currentLoadedUrl, title: prevTitle });
-      if (historyStack.length > 25) historyStack.shift();
-    }
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastTimer;
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+}
 
-    iframeElement.src = url;
-    currentLoadedUrl = url;
-    titleSpan.innerHTML = `📄 ${title}`;
+/* ============================================================
+   OPTIONS
+   ============================================================ */
+function renderOptions(filter) {
+  const q = (filter || '').toLowerCase().trim();
+  const list = q ? OPTIONS.filter(o => o.name.toLowerCase().includes(q)) : OPTIONS;
+
+  optionsList.innerHTML = '';
+
+  if (!list.length) {
+    optionsList.innerHTML =
+      '<div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-3);font-size:.9rem">' +
+      '🔍 No modules match your search</div>';
+    return;
   }
 
-  // --------------------------------------------------------------
-  // Back navigation: pop from stack
-  // --------------------------------------------------------------
-  function goBack() {
-    if (!iframeElement || !titleSpan) return;
-    if (historyStack.length === 0) {
-      // reset to home
-      if (currentLoadedUrl && currentLoadedUrl !== "about:blank") {
-        iframeElement.src = "about:blank";
-        currentLoadedUrl = "";
-        titleSpan.innerHTML = `📄 Select a module`;
-      } else {
-        iframeElement.src = "about:blank";
-        titleSpan.innerHTML = `📄 Select a module`;
-        currentLoadedUrl = "";
-      }
-      return;
-    }
-    const previous = historyStack.pop();
-    iframeElement.src = previous.url;
-    currentLoadedUrl = previous.url;
-    titleSpan.innerHTML = `📄 ${previous.title}`;
-  }
-
-  // --------------------------------------------------------------
-  // Open LS Report in new tab (function for the footer link)
-  // --------------------------------------------------------------
-  function openInNewTab(event) {
-    event.preventDefault();
-    window.open('lsReport.html', '_blank', 'noopener,noreferrer');
-  }
-
-  // --------------------------------------------------------------
-  // Render module list as vertical cards for easier mobile interaction
-  // --------------------------------------------------------------
-  function renderMobileModules() {
-    const container = document.getElementById("modulesListContainer");
-    if (!container) return;
-    let itemsHtml = "";
-    modulesDataset.forEach((mod, idx) => {
-      itemsHtml += `
-        <div class="module-item" data-module-index="${idx}">
-          <div class="module-emoji">${mod.icon}</div>
-          <div class="module-info">
-            <h3>${mod.name}</h3>
-            <p>${mod.desc}</p>
-          </div>
-        </div>
-      `;
-    });
-    container.innerHTML = itemsHtml;
-    // attach click events
-    document.querySelectorAll('.module-item').forEach(item => {
-      item.addEventListener('click', (e) => {
-        const idxAttr = item.getAttribute('data-module-index');
-        if (idxAttr !== null && modulesDataset[parseInt(idxAttr)]) {
-          const target = modulesDataset[parseInt(idxAttr)];
-          loadModule(target.url, target.name);
-        }
-      });
-    });
-  }
-
-  // --------------------------------------------------------------
-  // Authentication & UI visibility
-  // --------------------------------------------------------------
-  function logoutAndReset() {
-    localStorage.removeItem("gepco_auth");
-    const mainDiv = document.getElementById("mainDashboard");
-    const loginDiv = document.getElementById("loginOverlay");
-    if (mainDiv) mainDiv.style.display = "none";
-    if (loginDiv) loginDiv.style.display = "flex";
-    if (iframeElement) {
-      iframeElement.src = "about:blank";
-    }
-    currentLoadedUrl = "";
-    historyStack = [];
-    if (titleSpan) titleSpan.innerHTML = "📄 Select a module";
-    // Clear login fields
-    const userField = document.getElementById("loginUser");
-    const passField = document.getElementById("loginPass");
-    if (userField) userField.value = "";
-    if (passField) passField.value = "";
-    const errorDiv = document.getElementById("loginError");
-    if (errorDiv) errorDiv.innerText = "";
-  }
-
-  function attemptLogin() {
-    const username = document.getElementById("loginUser").value.trim();
-    const password = document.getElementById("loginPass").value.trim();
-    const errorSpan = document.getElementById("loginError");
-    if (username === VALID_USER && password === VALID_PASS) {
-      localStorage.setItem("gepco_auth", "true");
-      showMobileDashboard();
-    } else {
-      if (errorSpan) errorSpan.innerText = "❌ Access denied · wrong credentials";
-      setTimeout(() => { if (errorSpan) errorSpan.innerText = ""; }, 2000);
-    }
-  }
-
-  function showMobileDashboard() {
-    const loginOverlay = document.getElementById("loginOverlay");
-    const mainDashboard = document.getElementById("mainDashboard");
-    if (loginOverlay) loginOverlay.style.display = "none";
-    if (mainDashboard) mainDashboard.style.display = "block";
-
-    iframeElement = document.getElementById("sheetFrame");
-    titleSpan = document.getElementById("currentSheetTitle");
-
-    if (iframeElement) {
-      iframeElement.src = "about:blank";
-      // optional: disable context menu to avoid external open (security)
-      iframeElement.addEventListener("contextmenu", (e) => {
-        e.preventDefault();
-        return false;
-      });
-    }
-    currentLoadedUrl = "";
-    historyStack = [];
-    if (titleSpan) titleSpan.innerHTML = "📄 Select a module";
-
-    renderMobileModules();  // draw fresh module list
-  }
-
-  function checkAuthState() {
-    const auth = localStorage.getItem("gepco_auth");
-    if (auth === "true") {
-      showMobileDashboard();
-    } else {
-      document.getElementById("loginOverlay").style.display = "flex";
-      document.getElementById("mainDashboard").style.display = "none";
-    }
-  }
-
-  // --------------------------------------------------------------
-  // Event bindings (safe, with mobile in mind)
-  // --------------------------------------------------------------
-  function bindEvents() {
-    const loginBtn = document.getElementById("loginBtn");
-    const logoutBtn = document.getElementById("logoutButton");
-    const backBtn = document.getElementById("backButton");
-    const newTabLink = document.getElementById("openNewTabLink");
-
-    if (loginBtn) loginBtn.addEventListener("click", attemptLogin);
-    if (logoutBtn) logoutBtn.addEventListener("click", logoutAndReset);
-    if (backBtn) backBtn.addEventListener("click", goBack);
-    if (newTabLink) newTabLink.addEventListener("click", openInNewTab);
-
-    const userInput = document.getElementById("loginUser");
-    const passInput = document.getElementById("loginPass");
-    const handleEnter = (e) => {
-      if (e.key === "Enter") attemptLogin();
-    };
-    if (userInput) userInput.addEventListener("keypress", handleEnter);
-    if (passInput) passInput.addEventListener("keypress", handleEnter);
-  }
-
-  // ------------------------------------------------------------------
-  // Initialize app, preview: make sure iframe is ready, LS site works
-  // ------------------------------------------------------------------
-  document.addEventListener("DOMContentLoaded", () => {
-    bindEvents();
-    checkAuthState();
-
-    // re-run render if modules container exists after dashboard shown
-    const observer = new MutationObserver(() => {
-      const container = document.getElementById("modulesListContainer");
-      if (container && container.children.length === 0 && document.getElementById("mainDashboard").style.display === "block") {
-        renderMobileModules();
-      }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
+  list.forEach(opt => {
+    const a = document.createElement('a');
+    a.className = 'option-card';
+    a.href = opt.url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.innerHTML =
+      '<div class="option-emoji">' + opt.icon + '</div>' +
+      '<div class="option-text">' + opt.name + '</div>' +
+      '<div class="option-arrow">↗</div>';
+    optionsList.appendChild(a);
   });
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+searchInput.addEventListener('input', e => renderOptions(e.target.value));
+
+/* ============================================================
+   BOTTOM NAV
+   ============================================================ */
+bottomNav.addEventListener('click', e => {
+  const item = e.target.closest('.nav-item');
+  if (!item) return;
+
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  item.classList.add('active');
+
+  const nav = item.dataset.nav;
+  if (nav === 'home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (nav === 'safety') {
+    document.querySelector('.hero').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showToast('🛡️ Safety Guide');
+  } else if (nav === 'search') {
+    searchInput.focus();
+    searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else if (nav === 'profile') {
+    showToast('👤 Signed in as ' + VALID_USER);
+  }
+});
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+function setError(msg) { loginError.textContent = msg || ''; }
+
+function attemptLogin(e) {
+  if (e) e.preventDefault();
+  setError('');
+
+  const u = loginUser.value.trim();
+  const p = loginPass.value;
+
+  if (!u || !p) { setError('Please enter both username and password.'); return; }
+
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Signing in…';
+
+  setTimeout(() => {
+    if (u === VALID_USER && p === VALID_PASS) {
+      localStorage.setItem(STORAGE_KEY, 'true');
+      showDashboard();
+      showToast('✅ Welcome back, ' + u);
+    } else {
+      setError('Access denied — wrong credentials.');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Sign In →';
+      loginPass.value = '';
+      loginPass.focus();
+    }
+  }, 250);
+}
+
+function logout() {
+  localStorage.removeItem(STORAGE_KEY);
+  loginUser.value = '';
+  loginPass.value = '';
+  setError('');
+  loginBtn.disabled = false;
+  loginBtn.textContent = 'Sign In →';
+  dashboard.style.display = 'none';
+  bottomNav.style.display = 'none';
+  loginScreen.style.display = 'flex';
+  setTimeout(() => loginUser.focus(), 100);
+}
+
+function showDashboard() {
+  loginScreen.style.display = 'none';
+  dashboard.style.display = 'block';
+  bottomNav.style.display = 'flex';
+  loginBtn.disabled = false;
+  loginBtn.textContent = 'Sign In →';
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+(function init() {
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+  applyTheme(savedTheme);
+
+  renderOptions();
+
+  themeToggle.addEventListener('click', toggleTheme);
+  logoutBtn.addEventListener('click', logout);
+  loginForm.addEventListener('submit', attemptLogin);
+
+  if (localStorage.getItem(STORAGE_KEY) === 'true') {
+    showDashboard();
+  } else {
+    loginScreen.style.display = 'flex';
+    dashboard.style.display = 'none';
+    bottomNav.style.display = 'none';
+    setTimeout(() => loginUser.focus(), 100);
+  }
+})();
 </script>
 </body>
 </html>
