@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEPCO Safety Leadership Directives</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Variables */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #0f172a;
+            --bg-darker: #020617;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            /* CEO Theme Colors (Electric Blue) */
+            --ceo-accent: #3b82f6;
+            --ceo-glow: rgba(59, 130, 246, 0.2);
+            --ceo-gradient: linear-gradient(135deg, #3b82f6, #06b6d4);
+            
+            /* Chairman Theme Colors (Royal Gold/Amber) */
+            --ch-accent: #f59e0b;
+            --ch-glow: rgba(245, 158, 11, 0.2);
+            --ch-gradient: linear-gradient(135deg, #f59e0b, #eab308);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-darker);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.08), transparent 30%);
+        }
+
+        .app-container {
+            width: 100%; max-width: 1100px; padding: 2rem;
+            display: flex; flex-direction: column; gap: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Header & Tabs */
+        .header-section { text-align: center; }
+        .header-section h1 {
+            font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px;
+            margin-bottom: 0.5rem; background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .header-section p { color: var(--text-muted); font-size: 1rem; margin-bottom: 2rem; }
+
+        .tabs-container {
+            display: flex; justify-content: center; gap: 1rem;
+            background: rgba(15, 23, 42, 0.6); padding: 0.5rem;
+            border-radius: 16px; border: 1px solid var(--card-border);
+            width: fit-content; margin: 0 auto; backdrop-filter: blur(10px);
+        }
+
+        .tab-btn {
+            background: transparent; border: none; color: var(--text-muted);
+            padding: 0.8rem 2rem; border-radius: 12px; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .tab-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+        .tab-btn.active[data-tab="ceo"] { background: var(--ceo-gradient); color: white; box-shadow: 0 4px 20px var(--ceo-glow); }
+        .tab-btn.active[data-tab="chairman"] { background: var(--ch-gradient); color: white; box-shadow: 0 4px 20px var(--ch-glow); }
+
+        /* Message Cards */
+        .message-wrapper { position: relative; min-height: 500px; }
+
+        .message-card {
+            position: absolute; top: 0; left: 0; width: 100%;
+            opacity: 0; pointer-events: none; transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 3rem; backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex; flex-direction: column; gap: 2rem;
+        }
+
+        .message-card.active { position: relative; opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .message-card#ceo-message { border-top: 4px solid var(--ceo-accent); }
+        .message-card#chairman-message { border-top: 4px solid var(--ch-accent); }
+
+        .quote-icon { font-size: 3rem; line-height: 1; font-family: 'Playfair Display', serif; opacity: 0.8; margin-bottom: -1rem; }
+        .message-card#ceo-message .quote-icon { color: var(--ceo-accent); }
+        .message-card#chairman-message .quote-icon { color: var(--ch-accent); }
+
+        .message-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; line-height: 1.3; }
+        .message-body { font-size: 1.15rem; line-height: 1.8; color: #cbd5e1; display: flex; flex-direction: column; gap: 1.5rem; }
+        .message-body strong { color: var(--text-main); font-weight: 600; }
+
+        .message-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        .signature-block { display: flex; flex-direction: column; gap: 0.3rem; }
+        .signature-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; font-style: italic; }
+        .signature-title { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .signature-line { width: 200px; height: 2px; margin-top: 0.5rem; }
+
+        /* Acknowledgment Form */
+        .acknowledgment-box {
+            background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.5rem;
+            display: flex; align-items: center; gap: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease;
+        }
+
+        .acknowledgment-box input[type="checkbox"] { width: 24px; height: 24px; cursor: pointer; flex-shrink: 0; }
+        .message-card#ceo-message .acknowledgment-box input[type="checkbox"] { accent-color: var(--ceo-accent); }
+        .message-card#chairman-message .acknowledgment-box input[type="checkbox"] { accent-color: var(--ch-accent); }
+
+        .acknowledgment-box label { font-size: 1rem; font-weight: 500; cursor: pointer; color: var(--text-main); user-select: none; }
+        .acknowledgment-box .subtext { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .app-container { padding: 1rem; }
+            .header-section h1 { font-size: 1.6rem; }
+            .tabs-container { width: 100%; flex-direction: column; }
+            .tab-btn { justify-content: center; }
+            .message-card { padding: 1.5rem; }
+            .message-title { font-size: 1.5rem; }
+            .message-body { font-size: 1rem; }
+            .message-footer { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+            .signature-line { width: 100%; }
+            .acknowledgment-box { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header-section">
+            <h1>GEPCO Safety Leadership Directives</h1>
+            <p>Official safety messages from the highest levels of leadership</p>
+        </header>
+
+        <nav class="tabs-container">
+            <button class="tab-btn active" data-tab="ceo" onclick="switchTab('ceo')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                CEO's Message
+            </button>
+            <button class="tab-btn" data-tab="chairman" onclick="switchTab('chairman')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                Chairman BOD's Message
+            </button>
+        </nav>
+
+        <div class="message-wrapper">
+            <!-- ================= CEO MESSAGE ================= -->
+            <div id="ceo-message" class="message-card active">
+                <div class="quote-icon">“</div>
+                <h2 class="message-title">Safety is Not a Checklist. It is Our Culture.</h2>
+                <div class="message-body">
+                    <p>To the dedicated team of GEPCO,</p>
+                    <p>Every single day, you step into the field to keep the lights on for millions. You climb poles, maintain grids, and face high-voltage challenges. But let me be absolutely clear: <strong>No power supply is worth a human life.</strong></p>
+                    <p>Safety is not a set of rules we follow to appease auditors; it is the heartbeat of our operations. It is the promise you make to your family when you leave home in the morning, and the promise we make to you as an organization.</p>
+                    <p>I urge you to empower yourselves. Stop unsafe work. Speak up when you see a hazard. Look out for your colleague standing next to you. Let us build a culture where safety is instinctive, not just instructional. Your life is the current that powers our nation. Go home safe, every single day.</p>
+                </div>
+                <div class="message-footer">
+                    <div class="signature-block">
+                        <span class="signature-name">Chief Executive Officer</span>
+                        <span class="signature-title">GEPCO</span>
+                        <div class="signature-line" style="background: var(--ceo-accent);"></div>
+                    </div>
+                </div>
+                <div class="acknowledgment-box">
+                    <input type="checkbox" id="ack-ceo" onchange="handleAck('ack-ceo', 'ceo')">
+                    <div>
+                        <label for="ack-ceo">I commit to prioritizing my safety and the safety of my team.</label>
+                        <div class="subtext">By checking this box, you acknowledge that you have read and understood the CEO's safety directive.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= CHAIRMAN MESSAGE ================= -->
+            <div id="chairman-message" class="message-card">
+                <div class="quote-icon">“</div>
+                <h2 class="message-title">The Moral Compass of Our Organization.</h2>
+                <div class="message-body">
+                    <p>Esteemed colleagues and stakeholders,</p>
+                    <p>As the Chairman of the Board, my foremost commitment is to the preservation of our greatest asset—<strong>our people</strong>. A robust safety framework is not merely a regulatory requirement; it is the moral compass of our organization.</p>
+                    <p>We must strive for a zero-harm environment, where every employee feels empowered to prioritize their well-being above all else. Safety is the foundation upon which GEPCO's sustainable future is built. It is not just about preventing accidents; it is about fostering a workplace where dignity and life are valued above all metrics.</p>
+                    <p>I call upon every member of this organization to embrace safety as a personal and collective responsibility. Together, let us set a standard of excellence that protects not only our workforce but also the communities we serve. Safety is the ultimate investment.</p>
+                </div>
+                <div class="message-footer">
+                    <div class="signature-block">
+                        <span class="signature-name">Chairman Board of Directors</span>
+                        <span class="signature-title">GEPCO</span>
+                        <div class="signature-line" style="background: var(--ch-accent);"></div>
+                    </div>
+                </div>
+                <div class="acknowledgment-box">
+                    <input type="checkbox" id="ack-chairman" onchange="handleAck('ack-chairman', 'chairman')">
+                    <div>
+                        <label for="ack-chairman">I pledge to uphold the moral duty of safety within GEPCO.</label>
+                        <div class="subtext">By checking this box, you acknowledge that you have read and understood the Chairman's safety vision.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT LOGIC
+         ========================================== -->
+    <script>
+        // ==========================================
+        // 1. TAB SWITCHING LOGIC
+        // ==========================================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.dataset.tab === tabId) btn.classList.add('active');
+            });
+
+            document.querySelectorAll('.message-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(`${tabId}-message`).classList.add('active');
+        }
+
+        // ==========================================
+        // 2. GOOGLE SHEETS DATA SUBMISSION
+        // ==========================================
+        
+        // ⚠️ REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz972RBQe2sBNzs1dzrB6ntbmzCsu32zrdioUsW1ROTzfyz6J1Kki9cofWVMYKmvjArlQ/exec';
+
+        function handleAck(checkboxId, role) {
+            const checkbox = document.getElementById(checkboxId);
+            const box = checkbox.closest('.acknowledgment-box');
+            const label = box.querySelector('label');
+            
+            if (checkbox.checked) {
+                // Visual Feedback (Checked)
+                box.style.borderColor = role === 'ceo' ? 'var(--ceo-accent)' : 'var(--ch-accent)';
+                box.style.background = role === 'ceo' ? 'rgba(59, 130, 246, 0.1)' : 'rgba(245, 158, 11, 0.1)';
+                
+                const originalText = label.innerText;
+                label.innerText = "⏳ Sending acknowledgment to GEPCO HQ...";
+                
+                // Send Data to Google Sheets
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        role: role.toUpperCase(),
+                        status: 'Acknowledged',
+                        timestamp: new Date().toLocaleString()
+                    })
+                })
+                .then(() => {
+                    label.innerText = "✅ Acknowledgment Sent Successfully!";
+                    label.style.color = "#22c55e";
+                })
+                .catch(error => {
+                    label.innerText = "❌ Error sending. Please try again.";
+                    label.style.color = "#ef4444";
+                    console.error('Error!', error.message);
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        label.innerText = originalText;
+                        label.style.color = "var(--text-main)";
+                    }, 3000);
+                });
+
+            } else {
+                // Visual Feedback (Unchecked)
+                box.style.borderColor = 'rgba(255, 255, 255, 0.05)';
+                box.style.background = 'rgba(0, 0, 0, 0.2)';
+            }
+        }
+    </script>
+</body>
+</html>

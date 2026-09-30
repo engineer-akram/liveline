@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Posters Directory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #1a2235;
+            --card-hover: #24304a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Main Container */
+        #app {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* View Management */
+        .view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .view.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* --- MENU VIEW --- */
+        #menu-view {
+            justify-content: flex-start;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            margin-top: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+            padding-bottom: 3rem;
+        }
+
+        .option-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeInUp 0.5s ease-out both;
+        }
+
+        .option-card:hover {
+            background-color: var(--card-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.5);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .option-number {
+            background-color: var(--accent);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .option-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* --- VIEWER VIEW --- */
+        #viewer-view {
+            background-color: var(--bg-color);
+            justify-content: space-between;
+            padding: 1.5rem;
+        }
+
+        .viewer-header {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all var(--transition-speed);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .viewer-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            flex-grow: 1;
+            margin: 0 1rem;
+        }
+
+        .image-wrapper {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .viewer-footer {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .download-btn {
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .download-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title h1 { font-size: 1.8rem; }
+            .options-grid { grid-template-columns: 1fr; }
+            .viewer-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+            .viewer-title { font-size: 1.2rem; text-align: left; margin: 0; }
+            .back-btn { width: 100%; justify-content: center; }
+            .download-btn { width: 100%; justify-content: center; }
+            .viewer-view { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        
+        <!-- ================= MENU VIEW ================= -->
+        <div id="menu-view" class="view active">
+            <div class="header-title">
+                <h1>Safety Posters Directory</h1>
+                <p>Select a topic to view the poster</p>
+            </div>
+            <div class="options-grid" id="options-grid">
+                <!-- Options will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- ================= VIEWER VIEW ================= -->
+        <div id="viewer-view" class="view">
+            <div class="viewer-header">
+                <button class="back-btn" onclick="goBack()">
+                    ← Go Back
+                </button>
+                <h2 class="viewer-title" id="viewer-title">Poster Title</h2>
+                <div style="width: 120px;"></div> <!-- Spacer to center title perfectly -->
+            </div>
+            
+            <div class="image-wrapper">
+                <img id="viewer-img" src="" alt="Poster">
+            </div>
+
+            <div class="viewer-footer">
+                <a id="download-link" href="#" download class="download-btn">
+                    ⬇ Download Image
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Corrected Data Array (Sequential 1 to 10)
+        const posters = [
+            { id: "1", title: "GEPCO HSE Policy", file: "hsePolicy.jfif" },
+            { id: "2", title: "Directions For Line Staff", file: "ifLineStaff.jfif" },
+            { id: "3", title: "Instructions For Line Staff Before Work", file: "bfWork.jfif" },
+            { id: "4", title: "Directions For Grid Staff", file: "ifGridStaff.jfif" },
+            { id: "5", title: "Directions For Supervisory Staff", file: "ifSupStaff.jfif" },
+            { id: "6", title: "How To Use High Voltage Detector", file: "hVlotDetect.jfif" },
+            { id: "7", title: "Earth Is Life (Slogan)", file: "earthLife.jfif" },
+            { id: "8", title: "Pole Top Rescue", file: "poltopRescue.jfif" },
+            { id: "9", title: "Reporting An Accident", file: "repAcc.jfif" },
+            { id: "10", title: "Consumer Protection", file: "proConsumer.jfif" }
+        ];
+
+        const menuView = document.getElementById('menu-view');
+        const viewerView = document.getElementById('viewer-view');
+        const optionsGrid = document.getElementById('options-grid');
+        const viewerTitle = document.getElementById('viewer-title');
+        const viewerImg = document.getElementById('viewer-img');
+        const downloadLink = document.getElementById('download-link');
+
+        // Generate the menu options on load
+        function buildMenu() {
+            optionsGrid.innerHTML = '';
+            posters.forEach((poster, index) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                // Add staggered animation delay
+                card.style.animationDelay = `${index * 0.05}s`;
+                
+                card.innerHTML = `
+                    <div class="option-number">${poster.id}</div>
+                    <div class="option-title">${poster.title}</div>
+                `;
+                
+                card.onclick = () => openPoster(poster);
+                optionsGrid.appendChild(card);
+            });
+        }
+
+        // Open a specific poster
+        function openPoster(poster) {
+            // Set data
+            viewerTitle.textContent = poster.title;
+            viewerImg.src = poster.file;
+            viewerImg.alt = poster.title;
+            
+            // Set download link
+            downloadLink.href = poster.file;
+            downloadLink.download = poster.file; // Suggests the original filename
+
+            // Handle missing images gracefully
+            viewerImg.onerror = function() {
+                this.onerror = null;
+                this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="100%" height="100%" fill="%231a2235"/><text x="50%" y="50%" font-family="sans-serif" font-size="24" fill="%2394a3b8" text-anchor="middle" dominant-baseline="middle">Image Not Found: ' + poster.file + '</text></svg>';
+            };
+
+            // Switch views
+            menuView.classList.remove('active');
+            viewerView.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Go back to the menu
+        function goBack() {
+            viewerView.classList.remove('active');
+            menuView.classList.add('active');
+            
+            // Clear image source to free memory (optional)
+            setTimeout(() => {
+                viewerImg.src = '';
+            }, 300);
+        }
+
+        // Initialize
+        buildMenu();
+    </script>
+</body>
+</html>
