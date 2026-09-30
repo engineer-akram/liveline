@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEPCO Safety Culture | Leading with International Best Practices</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CSS RESET & ROOT VARIABLES
+============================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-dark: #0a0e1a;
+  --bg-darker: #050810;
+  --bg-card: rgba(20, 30, 50, 0.6);
+  --bg-card-hover: rgba(30, 45, 75, 0.8);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(59, 130, 246, 0.4);
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-glow: rgba(59, 130, 246, 0.3);
+  --cyan: #06b6d4;
+  --teal: #14b8a6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #a855f7;
+
+  --gradient-primary: linear-gradient(135deg, #3b82f6, #06b6d4);
+  --gradient-gold: linear-gradient(135deg, #f59e0b, #fbbf24);
+  --gradient-danger: linear-gradient(135deg, #ef4444, #f97316);
+  --gradient-green: linear-gradient(135deg, #22c55e, #14b8a6);
+
+  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
+
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-darker);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.08), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(245, 158, 11, 0.06), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(20, 184, 166, 0.06), transparent 40%);
+  background-attachment: fixed;
+}
+
+/* ============================================
+   NAVIGATION
+============================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(10, 14, 26, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  transition: all var(--transition);
+}
+
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.3px;
+}
+
+.nav-brand-icon {
+  width: 38px; height: 38px;
+  background: var(--gradient-primary);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.nav-brand span.grad {
+  background: linear-gradient(90deg, #60a5fa, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  transition: all var(--transition);
+}
+
+.nav-links a:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-cta {
+  background: var(--gradient-primary);
+  color: white;
+  padding: 0.6rem 1.3rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  box-shadow: 0 4px 15px var(--primary-glow);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow); }
+
+/* ============================================
+   HERO SECTION
+============================================ */
+.hero {
+  min-height: 100vh;
+  padding: 8rem 2rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.05), transparent, rgba(245, 158, 11, 0.05), transparent);
+  animation: rotate 40s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+.hero-content {
+  max-width: 1200px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 1s ease-out;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+  padding: 0.5rem 1.2rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+}
+
+.hero-badge .dot {
+  width: 8px; height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 .grad {
+  background: linear-gradient(90deg, #60a5fa, #06b6d4, #14b8a6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero h1 .gold {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.7;
+}
+
+.hero-sub strong { color: var(--text-main); }
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 4rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition);
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 8px 25px var(--primary-glow);
+}
+
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px var(--primary-glow); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+
+.btn-outline:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--primary); }
+
+/* Stats Bar */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  transition: all var(--transition);
+}
+
+.stat-card:hover { transform: translateY(-5px); border-color: var(--border-hover); }
+
+.stat-num {
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.stat-num.gold { background: var(--gradient-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-num.green { background: var(--gradient-green); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.stat-num.red { background: var(--gradient-danger); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   SECTION STYLES
+============================================ */
+section { padding: 6rem 2rem; position: relative; }
+
+.container { max-width: 1300px; margin: 0 auto; }
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 1rem;
+}
+
+.section-header h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.section-header h2 .grad {
+  background: linear-gradient(90deg, #60a5fa, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   GOLDEN RULES GRID
+============================================ */
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.rule-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+  backdrop-filter: blur(10px);
+}
+
+.rule-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: var(--gradient-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.rule-card:hover { transform: translateY(-8px); border-color: var(--border-hover); box-shadow: var(--shadow-glow); }
+.rule-card:hover::before { transform: scaleX(1); }
+
+.rule-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.rule-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.rule-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.rule-card .ref {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--cyan);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+}
+
+/* ============================================
+   STANDARDS SECTION
+============================================ */
+.standards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.standard-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  text-align: center;
+  transition: all var(--transition);
+  cursor: default;
+}
+
+.standard-card:hover { transform: translateY(-5px); border-color: var(--border-hover); }
+
+.standard-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.standard-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.2px;
+}
+
+.standard-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ============================================
+   HIERARCHY OF CONTROLS
+============================================ */
+.hierarchy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hierarchy-level {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 1.75rem;
+  border-radius: 14px;
+  border-left: 5px solid;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: all var(--transition);
+}
+
+.hierarchy-level:hover { transform: translateX(8px); background: var(--bg-card-hover); }
+
+.hierarchy-level.l1 { border-left-color: var(--green); }
+.hierarchy-level.l2 { border-left-color: var(--teal); }
+.hierarchy-level.l3 { border-left-color: var(--cyan); }
+.hierarchy-level.l4 { border-left-color: var(--amber); }
+.hierarchy-level.l5 { border-left-color: var(--red); }
+
+.hierarchy-num {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.hierarchy-content h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.25rem; }
+.hierarchy-content p { font-size: 0.9rem; color: var(--text-muted); }
+
+.hierarchy-tag {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.tag-most { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.tag-least { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+.tag-mid { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+
+/* ============================================
+   CHECKLIST SECTION
+============================================ */
+.checklist-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.checklist-header h3 { font-size: 1.4rem; font-weight: 700; }
+
+.checklist-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.progress-bar {
+  width: 120px; height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-green);
+  border-radius: 100px;
+  transition: width 0.5s ease;
+}
+
+.checklist-items { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.checklist-item:hover { border-color: var(--border-hover); background: rgba(59, 130, 246, 0.05); }
+
+.checklist-item.checked {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.checklist-item input {
+  width: 22px; height: 22px;
+  accent-color: var(--green);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checklist-item label {
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.checklist-item label strong { display: block; margin-bottom: 0.15rem; }
+.checklist-item label span { font-size: 0.82rem; color: var(--text-muted); }
+
+/* ============================================
+   EMERGENCY TIMELINE
+============================================ */
+.timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-left: 3rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 15px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--red), var(--amber), var(--primary), var(--green));
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 2.5rem;
+}
+
+.timeline-item:last-child { padding-bottom: 0; }
+
+.timeline-dot {
+  position: absolute;
+  left: -2.5rem;
+  top: 0;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg-dark);
+  border: 3px solid var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  z-index: 2;
+}
+
+.timeline-item:nth-child(1) .timeline-dot { border-color: var(--red); color: var(--red); }
+.timeline-item:nth-child(2) .timeline-dot { border-color: var(--amber); color: var(--amber); }
+.timeline-item:nth-child(3) .timeline-dot { border-color: var(--primary); color: var(--primary); }
+.timeline-item:nth-child(4) .timeline-dot { border-color: var(--cyan); color: var(--cyan); }
+.timeline-item:nth-child(5) .timeline-dot { border-color: var(--green); color: var(--green); }
+
+.timeline-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: all var(--transition);
+}
+
+.timeline-content:hover { border-color: var(--border-hover); transform: translateX(5px); }
+
+.timeline-content h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.timeline-content p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+/* ============================================
+   PPE TABLE
+============================================ */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+thead {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+th {
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 1.25rem 1.5rem;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: rgba(59, 130, 246, 0.04); }
+td strong { color: var(--text-main); font-weight: 600; }
+
+.risk-badge {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.risk-high { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+.risk-med { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+.risk-low { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+
+/* ============================================
+   TRAINING ACCORDION
+============================================ */
+.accordion {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.accordion-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+
+.accordion-item.active { border-color: var(--border-hover); box-shadow: var(--shadow-glow); }
+
+.accordion-header {
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  gap: 1rem;
+}
+
+.accordion-header h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.accordion-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(59, 130, 246, 0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.accordion-toggle {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  transition: all var(--transition);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.accordion-item.active .accordion-toggle {
+  background: var(--primary);
+  color: white;
+  transform: rotate(45deg);
+}
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.accordion-body-inner {
+  padding: 0 1.75rem 1.75rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.accordion-body-inner ul { margin: 1rem 0 0 1.25rem; }
+.accordion-body-inner li { margin-bottom: 0.5rem; }
+.accordion-body-inner strong { color: var(--text-main); }
+
+/* ============================================
+   PLEDGE SECTION
+============================================ */
+.pledge-section {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(6, 182, 212, 0.05));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.pledge-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 3rem;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+}
+
+.pledge-card .quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.pledge-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+.pledge-text {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.9;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.pledge-text strong { color: var(--text-main); font-style: normal; }
+
+.pledge-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.pledge-form input, .pledge-form select {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all var(--transition);
+}
+
+.pledge-form input:focus, .pledge-form select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.pledge-form button {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition);
+  box-shadow: 0 8px 25px var(--primary-glow);
+}
+
+.pledge-form button:hover { transform: translateY(-2px); box-shadow: 0 12px 35px var(--primary-glow); }
+
+.pledge-message {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-height: 1.5rem;
+}
+
+/* ============================================
+   FOOTER
+============================================ */
+footer {
+  background: var(--bg-dark);
+  border-top: 1px solid var(--border);
+  padding: 3rem 2rem 2rem;
+  text-align: center;
+}
+
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+
+.footer-brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.footer-brand .grad {
+  background: linear-gradient(90deg, #60a5fa, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer-tagline {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color var(--transition);
+}
+
+.footer-links a:hover { color: var(--primary); }
+
+.footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+/* ============================================
+   ANIMATIONS
+============================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  section { padding: 4rem 1.25rem; }
+  .hero { padding: 7rem 1.25rem 3rem; }
+  .pledge-card { padding: 2rem 1.5rem; }
+  .checklist-container { padding: 1.5rem; }
+  .hierarchy-level { flex-wrap: wrap; }
+  .hierarchy-tag { margin-left: 0; margin-top: 0.5rem; }
+  .timeline { padding-left: 2rem; }
+  .timeline-dot { left: -2.25rem; width: 28px; height: 28px; font-size: 0.65rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAVIGATION
+============================================ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-brand-icon">⚡</div>
+      <div>GEPCO <span class="grad">Safety</span></div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#rules">Golden Rules</a></li>
+      <li><a href="#standards">Standards</a></li>
+      <li><a href="#hierarchy">Controls</a></li>
+      <li><a href="#checklist">Checklist</a></li>
+      <li><a href="#emergency">Emergency</a></li>
+      <li><a href="#ppe">PPE</a></li>
+      <li><a href="#training">Training</a></li>
+    </ul>
+    <a href="#pledge" class="nav-cta">Take the Pledge</a>
+  </div>
+</nav>
+
+<!-- ============================================
+     HERO
+============================================ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      ALIGNED WITH ISO 45001 · OSHA · NFPA 70E · IEC 61936
+    </div>
+    <h1>
+      Safety is Not Just a Policy.<br>
+      It is Our <span class="grad">Culture</span>, Our <span class="gold">Commitment</span>.
+    </h1>
+    <p class="hero-sub">
+      Empowering GEPCO officers to lead with <strong>international best practices</strong> in power distribution safety. 
+      Every wire energized, every pole climbed, every grid maintained — with <strong>zero harm</strong> as our unwavering standard.
+    </p>
+    <div class="hero-buttons">
+      <a href="#pledge" class="btn btn-primary">🤝 Take the Safety Pledge</a>
+      <a href="#rules" class="btn btn-outline">📋 Explore Golden Rules</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-num green" data-target="0">0</div>
+        <div class="stat-label">Fatalities Target</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" data-target="100">100%</div>
+        <div class="stat-label">PPE Compliance</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num gold" data-target="24">24/7</div>
+        <div class="stat-label">Emergency Ready</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num red" data-target="1000">1000+</div>
+        <div class="stat-label">Officers Trained</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     GOLDEN RULES
+============================================ -->
+<section id="rules">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">Foundation of Safety</div>
+      <h2>The 10 <span class="grad">Golden Rules</span> of Power Distribution Safety</h2>
+      <p>Universally recognized principles adopted from OSHA 1910.269, NFPA 70E, and IEC 61936. Non-negotiable for every GEPCO officer.</p>
+    </div>
+
+    <div class="rules-grid">
+      <div class="rule-card reveal">
+        <div class="rule-num">01</div>
+        <h3>Isolate & Lockout/Tagout</h3>
+        <p>Never work on energized equipment without verified isolation. Apply LOTO, test for zero energy, and prove the absence of voltage before touching any conductor.</p>
+        <span class="ref">OSHA 1910.147</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">02</div>
+        <h3>Test Before You Touch</h3>
+        <p>Treat every line as live until personally tested and grounded. Use calibrated voltage detectors and insulating gloves rated for the voltage class.</p>
+        <span class="ref">IEEE 516</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">03</div>
+        <h3>Correct PPE, Every Time</h3>
+        <p>Wear arc-rated clothing, insulated gloves, hard hats, safety boots, and eye protection appropriate to the hazard level. No shortcuts, no exceptions.</p>
+        <span class="ref">NFPA 70E</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">04</div>
+        <h3>Maintain Safe Approach Distances</h3>
+        <p>Respect minimum approach distances (MAD) for all voltage classes. Never breach the restricted zone without proper insulated tools and authorization.</p>
+        <span class="ref">OSHA 1910.269</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">05</div>
+        <h3>Permit to Work & Toolbox Talks</h3>
+        <p>Every job begins with a Permit to Work (PTW), Job Safety Analysis (JSA), and a documented toolbox talk. No briefing, no work.</p>
+        <span class="ref">ISO 45001</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">06</div>
+        <h3>Stop Work Authority</h3>
+        <p>Every officer has the unconditional right and duty to stop work when conditions become unsafe — without fear of retaliation.</p>
+        <span class="ref">Behavior-Based Safety</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">07</div>
+        <h3>Working at Heights</h3>
+        <p>Full-body harness, 100% fall-arrest tie-off, and inspected ladders and buckets. Pole-top rescue equipment must be on-site before ascending.</p>
+        <span class="ref">ANSI Z359</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">08</div>
+        <h3>Arc Flash & Blast Protection</h3>
+        <p>Calculate incident energy, respect arc flash boundaries, and wear arc-rated PPE matching the incident energy level. Never turn your back on a live panel.</p>
+        <span class="ref">NFPA 70E / IEEE 1584</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">09</div>
+        <h3>Report Every Incident</h3>
+        <p>Near misses, injuries, property damage — report within 15 minutes. Transparency saves lives. Concealment costs them.</p>
+        <span class="ref">OSHA Recordkeeping</span>
+      </div>
+
+      <div class="rule-card reveal">
+        <div class="rule-num">10</div>
+        <h3>Go Home Safe, Every Day</h3>
+        <p>Your family expects you home. Your team depends on you. Fatigue, distraction, and complacency are hazards — manage them like you manage voltage.</p>
+        <span class="ref">GEPCO Culture</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     INTERNATIONAL STANDARDS
+============================================ -->
+<section id="standards" style="background: rgba(0,0,0,0.2);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">Global Alignment</div>
+      <h2>International <span class="grad">Standards</span> We Follow</h2>
+      <p>Our safety framework is benchmarked against the world's most rigorous occupational health and electrical safety standards.</p>
+    </div>
+
+    <div class="standards-grid">
+      <div class="standard-card reveal">
+        <div class="standard-icon">🏆</div>
+        <h4>ISO 45001</h4>
+        <p>Occupational Health & Safety Management System — the global gold standard for workplace safety governance.</p>
+      </div>
+      <div class="standard-card reveal">
+        <div class="standard-icon">🇺🇸</div>
+        <h4>OSHA 1910.269</h4>
+        <p>US federal standard for electric power generation, transmission, and distribution safety.</p>
+      </div>
+      <div class="standard-card reveal">
+        <div class="standard-icon">⚡</div>
+        <h4>NFPA 70E</h4>
+        <p>Standard for Electrical Safety in the Workplace — arc flash, shock, and PPE requirements.</p>
+      </div>
+      <div class="standard-card reveal">
+        <div class="standard-icon">🔌</div>
+        <h4>IEC 61936</h4>
+        <p>International standard for power installations exceeding 1 kV AC — design and operation safety.</p>
+      </div>
+      <div class="standard-card reveal">
+        <div class="standard-icon">📏</div>
+        <h4>IEEE 516 / 1584</h4>
+        <p>Guides for live-line maintenance methods and arc flash hazard calculations.</p>
+      </div>
+      <div class="standard-card reveal">
+        <div class="standard-icon">🪜</div>
+        <h4>ANSI Z359</h4>
+        <p>Fall protection code governing harnesses, lanyards, and rescue systems.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     HIERARCHY OF CONTROLS
+============================================ -->
+<section id="hierarchy">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">Risk Mitigation Framework</div>
+      <h2>Hierarchy of <span class="grad">Hazard Controls</span></h2>
+      <p>Always eliminate first — don't rely on PPE as your only defense. This is the ISO 45001 and OSHA-recommended approach.</p>
+    </div>
+
+    <div class="hierarchy">
+      <div class="hierarchy-level l1 reveal">
+        <div class="hierarchy-num">1</div>
+        <div class="hierarchy-content">
+          <h4>Elimination</h4>
+          <p>Physically remove the hazard — e.g., de-energize the line before working on it.</p>
+        </div>
+        <span class="hierarchy-tag tag-most">Most Effective</span>
+      </div>
+
+      <div class="hierarchy-level l2 reveal">
+        <div class="hierarchy-num">2</div>
+        <div class="hierarchy-content">
+          <h4>Substitution</h4>
+          <p>Replace the hazard with something safer — e.g., use insulated tools instead of bare-hand contact.</p>
+        </div>
+        <span class="hierarchy-tag tag-most">Highly Effective</span>
+      </div>
+
+      <div class="hierarchy-level l3 reveal">
+        <div class="hierarchy-num">3</div>
+        <div class="hierarchy-content">
+          <h4>Engineering Controls</h4>
+          <p>Isolate people from the hazard — e.g., barriers, insulating blankets, arc-rated enclosures.</p>
+        </div>
+        <span class="hierarchy-tag tag-mid">Effective</span>
+      </div>
+
+      <div class="hierarchy-level l4 reveal">
+        <div class="hierarchy-num">4</div>
+        <div class="hierarchy-content">
+          <h4>Administrative Controls</h4>
+          <p>Change the way people work — e.g., permits, procedures, training, rotations.</p>
+        </div>
+        <span class="hierarchy-tag tag-mid">Moderate</span>
+      </div>
+
+      <div class="hierarchy-level l5 reveal">
+        <div class="hierarchy-num">5</div>
+        <div class="hierarchy-content">
+          <h4>PPE</h4>
+          <p>Protect the worker with personal equipment — the last line of defense, never the first.</p>
+        </div>
+        <span class="hierarchy-tag tag-least">Least Effective</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FIELD SAFETY CHECKLIST
+============================================ -->
+<section id="checklist" style="background: rgba(0,0,0,0.2);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">Officer's Field Toolkit</div>
+      <h2>Pre-Job <span class="grad">Safety Checklist</span></h2>
+      <p>Mandatory verification before any field activity. Complete every item — your life depends on it.</p>
+    </div>
+
+    <div class="checklist-container reveal">
+      <div class="checklist-header">
+        <h3>📋 Pre-Work Verification</h3>
+        <div class="checklist-progress">
+          <span id="progressText">0 / 12 completed</span>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+      </div>
+
+      <div class="checklist-items" id="checklist">
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Permit to Work (PTW) signed and displayed</strong>
+            <span>Job-specific permit approved by the authorized supervisor.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Job Safety Analysis (JSA) reviewed with the team</strong>
+            <span>All hazards identified and controls communicated.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Toolbox talk conducted and documented</strong>
+            <span>Attendance sheet signed by every crew member.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>LOTO applied and verified — zero energy confirmed</strong>
+            <span>Personal locks and tags in place; voltage test performed.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>PPE inspected and correct for voltage class</strong>
+            <span>Gloves, sleeves, arc-rated clothing, hard hat, safety boots.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Voltage detector calibrated and tested</strong>
+            <span>Calibration certificate valid; self-test passed.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Grounding equipment on-site and rated correctly</strong>
+            <span>Grounds applied before work begins on de-energized lines.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Fall protection & rescue plan ready (for height work)</strong>
+            <span>Harness, lanyard, and pole-top rescue kit available.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Barricades, signs, and traffic control in place</strong>
+            <span>Public protected; restricted zone marked.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Communication established with control room</strong>
+            <span>Radio / mobile check completed; emergency numbers confirmed.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>First-aid kit and fire extinguisher on-site</strong>
+            <span>Contents verified; extinguisher within service date.</span>
+          </label>
+        </label>
+        <label class="checklist-item">
+          <input type="checkbox" onchange="updateChecklist()">
+          <label>
+            <strong>Weather conditions assessed — no lightning threat</strong>
+            <span>Wind, rain, and lightning monitored; abort criteria known.</span>
+          </label>
+        </label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     EMERGENCY RESPONSE
+============================================ -->
+<section id="emergency">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">Critical Response</div>
+      <h2>Emergency Response <span class="grad">Timeline</span></h2>
+      <p>Every second matters. Follow this sequence exactly during any electrical incident.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">T+0</div>
+        <div class="timeline-content">
+          <h4>🚨 Secure the Scene</h4>
+          <p>Stop all work. Warn others. Do NOT approach the victim if the conductor may still be energized. Maintain safe distance and call for backup.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">T+30s</div>
+        <div class="timeline-content">
+          <h4>⚡ De-Energize the Source</h4>
+          <p>Notify the control room immediately. Trip the breaker / open the isolator. Confirm zero energy with a voltage detector before any rescue attempt.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">T+1m</div>
+        <div class="timeline-content">
+          <h4>📞 Activate Emergency Services</h4>
+          <p>Call 1122 (Rescue) and GEPCO Emergency Line. Provide exact location, number of casualties, and voltage involved. Stay on the line.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">T+2m</div>
+        <div class="timeline-content">
+          <h4>🩹 Provide First Aid & CPR</h4>
+          <p>Only after de-energization. Begin CPR if trained. Treat burns with clean, dry dressing. Do not apply ointments or remove stuck clothing.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">T+15m</div>
+        <div class="timeline-content">
+          <h4>📝 Report & Preserve Evidence</h4>
+          <p>Notify the Safety Officer. Photograph the scene. Preserve the equipment. Document witness statements. Submit the incident report within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PPE TABLE
+============================================ -->
+<section id="ppe" style="background: rgba(0,0,0,0.2);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">Personal Protection</div>
+      <h2>PPE Requirements by <span class="grad">Task & Voltage</span></h2>
+      <p>Mandatory PPE matrix aligned with NFPA 70E Category ratings and OSHA 1910.269.</p>
+    </div>
+
+    <div class="table-wrapper reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>Task / Activity</th>
+            <th>Voltage Class</th>
+            <th>Minimum PPE Required</th>
+            <th>Risk Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Meter Reading (low voltage)</strong></td>
+            <td>Up to 1 kV</td>
+            <td>Insulated gloves (Class 00), safety glasses, safety shoes</td>
+            <td><span class="risk-badge risk-low">Low</span></td>
+          </tr>
+          <tr>
+            <td><strong>LV Panel Operations</strong></td>
+            <td>400V – 1 kV</td>
+            <td>Class 0 gloves, arc-rated shirt (8 cal/cm²), face shield, hard hat</td>
+            <td><span class="risk-badge risk-med">Medium</span></td>
+          </tr>
+          <tr>
+            <td><strong>11 kV Switching / Maintenance</strong></td>
+            <td>11 kV</td>
+            <td>Class 2 gloves, 12 cal/cm² arc flash suit, hood, safety boots, voltage detector</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+          </tr>
+          <tr>
+            <td><strong>33 kV Substation Work</strong></td>
+            <td>33 kV</td>
+            <td>Class 3 gloves, 25 cal/cm² suit, insulated tools, arc-rated face shield, MAD compliance</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+          </tr>
+          <tr>
+            <td><strong>Pole Climbing / Tower Work</strong></td>
+            <td>Any</td>
+            <td>Full-body harness (ANSI Z359), pole-top rescue kit, non-conductive helmet, fall arrest</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+          </tr>
+          <tr>
+            <td><strong>Underground Cable Fault Location</strong></td>
+            <td>11 – 33 kV</td>
+            <td>Class 2-3 gloves, arc-rated clothing, gas detector, ventilation, rescue tripod</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+          </tr>
+          <tr>
+            <td><strong>Live-Line Washing / Bare-Hand Work</strong></td>
+            <td>132 kV & above</td>
+            <td>Conductive suit, Faraday cage, helicopter / insulated bucket, full MAD protocol</td>
+            <td><span class="risk-badge risk-high">Very High</span></td>
+          </tr>
+          <tr>
+            <td><strong>Transformer Oil Handling</strong></td>
+            <td>—</td>
+            <td>Nitrile gloves, chemical goggles, oil-resistant apron, safety boots</td>
+            <td><span class="risk-badge risk-med">Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     TRAINING MODULES
+============================================ -->
+<section id="training">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">Continuous Learning</div>
+      <h2>Safety <span class="grad">Training Modules</span> for Officers</h2>
+      <p>Structured competency development aligned with international certification pathways.</p>
+    </div>
+
+    <div class="accordion">
+      <div class="accordion-item reveal">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <h4><span class="accordion-icon">⚡</span> Module 1: Electrical Hazard Awareness</h4>
+          <div class="accordion-toggle">+</div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <p>Foundational training on the four primary electrical hazards: <strong>shock, arc flash, arc blast, and thermal burns</strong>. Officers learn how current flows through the body, the difference between contact and step potential, and how to recognize hazardous conditions before they escalate.</p>
+            <ul>
+              <li>Ohm's Law applied to body impedance</li>
+              <li>Incident energy calculation (IEEE 1584)</li>
+              <li>Arc flash boundary determination</li>
+              <li>Case studies of real distribution incidents</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item reveal">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <h4><span class="accordion-icon">🔒</span> Module 2: Lockout / Tagout (LOTO) Mastery</h4>
+          <div class="accordion-toggle">+</div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <p>Hands-on certification on the 6-step LOTO process: <strong>Prepare, Notify, Shutdown, Isolate, Lock & Tag, Verify</strong>. Includes group lockout procedures for multi-crew jobs and tag removal protocols.</p>
+            <ul>
+              <li>Personal lock assignment and control</li>
+              <li>Try-out / test for absence of voltage</li>
+              <li>Stored energy release (capacitors, springs, hydraulic)</li>
+              <li>Shift-change lockout transfer procedures</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item reveal">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <h4><span class="accordion-icon">🪜</span> Module 3: Working at Heights & Pole-Top Rescue</h4>
+          <div class="accordion-toggle">+</div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <p>Certification in fall arrest systems, 100% tie-off discipline, and pole-top rescue techniques. Meets ANSI Z359 and OSHA 1910.269 requirements.</p>
+            <ul>
+              <li>Harness inspection & fitting</li>
+              <li>Ladder and bucket truck safety</li>
+              <li>Rescue of a suspended worker (self-rescue & assisted)</li>
+              <li>Anchor point selection and load ratings</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item reveal">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <h4><span class="accordion-icon">🧯</span> Module 4: Arc Flash & PPE Selection</h4>
+          <div class="accordion-toggle">+</div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <p>NFPA 70E-based training on selecting arc-rated clothing, calculating incident energy, and understanding PPE categories. Officers perform arc flash risk assessments on real switchgear.</p>
+            <ul>
+              <li>Arc-rated vs. flame-resistant clothing</li>
+              <li>PPE category table and selection</li>
+              <li>Rubber insulating glove classes & testing</li>
+              <li>Arc flash labeling and boundaries</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item reveal">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <h4><span class="accordion-icon">🚑</span> Module 5: First Aid, CPR & Electrical Rescue</h4>
+          <div class="accordion-toggle">+</div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <p>Certified first-aid and CPR training focused on electrical injuries: burns, cardiac arrest, and neurological effects. Includes safe rescue from energized equipment.</p>
+            <ul>
+              <li>Safe removal of victim from contact</li>
+              <li>CPR and AED operation</li>
+              <li>Burn treatment and shock management</li>
+              <li>Emergency communication protocols</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item reveal">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <h4><span class="accordion-icon">🧠</span> Module 6: Behavior-Based Safety & Leadership</h4>
+          <div class="accordion-toggle">+</div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <p>Designed for officers leading crews. Focuses on safety leadership, observation, coaching, and building a positive safety culture where workers feel empowered to speak up.</p>
+            <ul>
+              <li>Conducting safety observations</li>
+              <li>Positive reinforcement techniques</li>
+              <li>Handling pushback and complacency</li>
+              <li>Leading safety meetings effectively</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PLEDGE SECTION
+============================================ -->
+<section id="pledge" class="pledge-section">
+  <div class="container">
+    <div class="pledge-card reveal">
+      <div class="quote">“</div>
+      <h3>The GEPCO Officer's Safety Pledge</h3>
+      <p class="pledge-text">
+        I, as an officer of GEPCO, solemnly pledge to uphold the highest standards of safety in every task I perform. 
+        I will <strong>never compromise on PPE</strong>, <strong>never bypass LOTO</strong>, and <strong>never ignore a hazard</strong>. 
+        I will protect my team, my community, and myself — because <strong>every life matters</strong>, and <strong>everyone deserves to go home safe</strong>.
+      </p>
+
+      <form class="pledge-form" onsubmit="submitPledge(event)">
+        <input type="text" id="officerName" placeholder="Enter your full name" required>
+        <input type="text" id="officerDesignation" placeholder="Designation (e.g., Sub-Divisional Officer)" required>
+        <input type="text" id="officerStation" placeholder="Station / Division" required>
+        <button type="submit">🤝 Sign the Pledge</button>
+      </form>
+      <div class="pledge-message" id="pledgeMessage"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+============================================ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">GEPCO <span class="grad">Safety Culture</span></div>
+    <p class="footer-tagline">Building a Zero-Harm Workplace through International Best Practices</p>
+
+    <div class="footer-links">
+      <a href="#rules">Golden Rules</a>
+      <a href="#standards">Standards</a>
+      <a href="#hierarchy">Hierarchy of Controls</a>
+      <a href="#checklist">Checklist</a>
+      <a href="#emergency">Emergency</a>
+      <a href="#ppe">PPE</a>
+      <a href="#training">Training</a>
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 Gujranwala Electric Power Company (GEPCO) — Health, Safety & Environment Directorate.<br>
+      Aligned with ISO 45001 · OSHA · NFPA 70E · IEC 61936 · IEEE 516 | <strong>Safety First. Always.</strong>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================
+     JAVASCRIPT
+============================================ -->
+<script>
+/* ============================================
+   SCROLL REVEAL ANIMATION
+============================================ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ============================================
+   NAVIGATION SMOOTH SCROLL (offset for fixed nav)
+============================================ */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      const offset = 80;
+      const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ============================================
+   CHECKLIST LOGIC
+============================================ */
+function updateChecklist() {
+  const items = document.querySelectorAll('#checklist .checklist-item');
+  const checked = document.querySelectorAll('#checklist input[type="checkbox"]:checked').length;
+  const total = items.length;
+  const percent = (checked / total) * 100;
+
+  document.getElementById('progressText').textContent = `${checked} / ${total} completed`;
+  document.getElementById('progressFill').style.width = percent + '%';
+
+  // Add visual "checked" class
+  items.forEach(item => {
+    const cb = item.querySelector('input[type="checkbox"]');
+    if (cb.checked) item.classList.add('checked');
+    else item.classList.remove('checked');
+  });
+
+  // Save to localStorage
+  const states = Array.from(items).map(item => item.querySelector('input').checked);
+  localStorage.setItem('gepco_checklist', JSON.stringify(states));
+}
+
+// Restore checklist from localStorage
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('gepco_checklist');
+  if (saved) {
+    const states = JSON.parse(saved);
+    const items = document.querySelectorAll('#checklist .checklist-item');
+    items.forEach((item, i) => {
+      if (states[i]) item.querySelector('input').checked = true;
+    });
+    updateChecklist();
+  }
+});
+
+/* ============================================
+   ACCORDION LOGIC
+============================================ */
+function toggleAccordion(header) {
+  const item = header.parentElement;
+  const body = item.querySelector('.accordion-body');
+  const isActive = item.classList.contains('active');
+
+  // Close all others
+  document.querySelectorAll('.accordion-item').forEach(other => {
+    other.classList.remove('active');
+    other.querySelector('.accordion-body').style.maxHeight = null;
+  });
+
+  // Toggle current
+  if (!isActive) {
+    item.classList.add('active');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+/* ============================================
+   PLEDGE SUBMISSION
+============================================ */
+// Replace with your Google Apps Script URL if you want to store pledges
+const PLEDGE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJWSaqaPLJoxdhJa5_T5HJqF9kldewAJcm4qKJs8Og8BLknWKmNG42b4FrEXzcLo9WhA/exec'; // Optional: add URL here
+
+function submitPledge(e) {
+  e.preventDefault();
+  const name = document.getElementById('officerName').value.trim();
+  const designation = document.getElementById('officerDesignation').value.trim();
+  const station = document.getElementById('officerStation').value.trim();
+  const msg = document.getElementById('pledgeMessage');
+
+  if (!name || !designation || !station) {
+    msg.style.color = '#f87171';
+    msg.textContent = '❌ Please fill all fields.';
+    return;
+  }
+
+  msg.style.color = '#fbbf24';
+  msg.textContent = '⏳ Recording your pledge...';
+
+  // If you have a Google Apps Script URL, submit there:
+  if (PLEDGE_SCRIPT_URL) {
+    fetch(PLEDGE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'Pledge',
+        name: name,
+        designation: designation,
+        station: station,
+        timestamp: new Date().toLocaleString()
+      })
+    })
+    .then(() => {
+      msg.style.color = '#22c55e';
+      msg.textContent = `✅ Thank you, ${name}! Your pledge has been recorded. You are now a Safety Champion.`;
+      e.target.reset();
+    })
+    .catch(() => {
+      msg.style.color = '#ef4444';
+      msg.textContent = '❌ Error recording pledge. Please try again.';
+    });
+  } else {
+    // Fallback: just show success locally
+    setTimeout(() => {
+      msg.style.color = '#22c55e';
+      msg.textContent = `✅ Thank you, ${name}! Your pledge has been recorded. You are now a Safety Champion.`;
+      e.target.reset();
+    }, 800);
+  }
+}
+
+/* ============================================
+   HERO STAT COUNTER ANIMATION
+============================================ */
+window.addEventListener('load', () => {
+  const stats = document.querySelectorAll('.stat-num[data-target]');
+  stats.forEach(stat => {
+    const target = parseInt(stat.dataset.target);
+    const duration = 1500;
+    const start = performance.now();
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.floor(eased * target);
+
+      if (target === 0) {
+        stat.textContent = '0';
+      } else if (target === 24) {
+        stat.textContent = '24/7';
+      } else if (target === 1000) {
+        stat.textContent = value + '+';
+      } else {
+        stat.textContent = value + '%';
+      }
+
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+});
+
+/* ============================================
+   PARALLAX HERO (subtle)
+============================================ */
+window.addEventListener('scroll', () => {
+  const scrolled = window.pageYOffset;
+  const heroContent = document.querySelector('.hero-content');
+  if (heroContent && scrolled < window.innerHeight) {
+    heroContent.style.transform = `translateY(${scrolled * 0.15}px)`;
+    heroContent.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
+  }
+});
+</script>
+
+</body>
+</html>
